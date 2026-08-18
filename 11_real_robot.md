@@ -35,15 +35,15 @@
 ## 実機の準備
 
 環境構築で実機用の追加(`--with-toio-py` など)が要る。手順は
-[docs/SETUP.md の「実機検証の手順」](../SETUP.md)に詳しい。ここでは要点だけ。
+[docs/SETUP.md の「実機検証の手順」](https://github.com/atinfinity/toio_rmf_bringup/blob/main/docs/SETUP.md)に詳しい。ここでは要点だけ。
 
 - Bluetoothアダプタが必要
 - toio.py を venv(`~/toio_venv`)へ導入済みであること
 - **A4マット**を使う(実機検証はA4前提で整備されている)
 - キューブの初期配置(チャージャー頂点への置き方)は
-  [docs/SETUP.md](../SETUP.md)を参照
+  [docs/SETUP.md](https://github.com/atinfinity/toio_rmf_bringup/blob/main/docs/SETUP.md)を参照
 
-![キューブの初期配置(A4マット)](../images/initial_placement_a4.svg)
+![キューブの初期配置(A4マット)](images/initial_placement_a4.svg)
 *toio1 は `charger_1`(左端から約5cm・上下中央)、toio2 は `charger_2`(右端から
 約5cm・上下中央)へ。破線の円は自動マージ範囲(半径0.06m)で、この内側なら
 だいたいの位置でよい。*
@@ -79,7 +79,7 @@ ros2 launch toio_rmf_bringup toio_rmf.launch.py mat:=a4
 
 TF待ちのタイムアウトは toio_navigation の `nav2_params.yaml` で **300秒**に
 設定済み(Nav2既定の60秒ではBLE接続に足りなかった)。この背景と、逆順に
-してしまった場合の対処は [docs/SETUP.md](../SETUP.md) に詳しい。
+してしまった場合の対処は [docs/SETUP.md](https://github.com/atinfinity/toio_rmf_bringup/blob/main/docs/SETUP.md) に詳しい。
 
 ## 実機だけの機能: Dockイベント
 
@@ -89,7 +89,7 @@ A4のチャージャー頂点には `dock_name` が設定されており、到�
 サーバが無いためNav2の結果だけで完了していた ── 実機ならではの精密停止。
 
 A4のnavグラフ(一方通行ループ + チャージャーは支線の先)の形は
-[章6](06_traffic.md)と[docs/TASKS.md](../TASKS.md)で見たとおり。チャージャーを
+[章6](06_traffic.md)と[docs/TASKS.md](https://github.com/atinfinity/toio_rmf_bringup/blob/main/docs/TASKS.md)で見たとおり。チャージャーを
 ループ上でなく支線の先に置いているのは、通過するだけのロボットが駐機中の
 相手に突っ込まないため。
 
@@ -116,7 +116,7 @@ ros2 run rmf_demos_tasks dispatch_go_to_place -p charger_2 -F toio -R toio1
 
 ## 卒業課題 ── 実機検証チェックリスト
 
-[docs/SETUP.md の「検証項目」](../SETUP.md)が、そのまま卒業課題になる。
+[docs/SETUP.md の「検証項目」](https://github.com/atinfinity/toio_rmf_bringup/blob/main/docs/SETUP.md)が、そのまま卒業課題になる。
 sim編の各章と対応づけて挑むと、学んだことの答え合わせになる:
 
 - [ ] patrolタスク完走(1台・3周)← [章4](04_patrol.md)

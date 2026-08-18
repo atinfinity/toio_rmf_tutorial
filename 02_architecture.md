@@ -96,7 +96,7 @@ ros2 topic echo /fleet_states --once
   `toio_ros2` の専用トピックから受け取る(→[章11](11_real_robot.md))。
 
 より詳しい構成図(どのノードがlaunchされるか)は
-[README のパッケージ構成図](../../README.md)にある。
+[README のパッケージ構成図](https://github.com/atinfinity/toio_rmf_bringup/blob/main/README.md)にある。
 
 ## 確認課題
 

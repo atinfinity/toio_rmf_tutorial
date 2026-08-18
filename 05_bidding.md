@@ -100,7 +100,7 @@ ros2 launch toio_rmf_bringup toio_rmf.launch.py mat:=a3 run_sim:=true use_sim_ti
   次章の交通調停の世界に入る。
 
 入札の詳しいシーケンス(BidNotice→BidResponse→落札)は
-[docs/TASKS.md の patrolタスク実行時のやりとり](../TASKS.md)にも図がある。
+[docs/TASKS.md の patrolタスク実行時のやりとり](https://github.com/atinfinity/toio_rmf_bringup/blob/main/docs/TASKS.md)にも図がある。
 
 ## 確認課題
 

@@ -15,7 +15,7 @@
 ### 1. ワークスペースを構築する
 
 環境構築はスクリプトで自動化されている。詳細な内訳とハマりどころは
-[docs/SETUP.md](../SETUP.md) にあるので、ここでは最短経路だけ示す。
+[docs/SETUP.md](https://github.com/atinfinity/toio_rmf_bringup/blob/main/docs/SETUP.md) にあるので、ここでは最短経路だけ示す。
 
 ```bash
 gh repo clone atinfinity/toio_rmf_bringup /tmp/toio_rmf_bringup
@@ -33,7 +33,7 @@ bash /tmp/toio_rmf_bringup/scripts/setup_environment.sh   # シミュレーシ�
 RMFの可視化ノードはマーカー寸法に0.1mの下限があり、そのままではtoioの小さな
 マット(A4で0.30×0.20m)で表示が破綻する。走行など機能面には影響しないが、
 このチュートリアルはRVizで内部状態を観察するので、当てておくと後がラク。
-手順は[docs/SETUP.md の「rmf_visualization パッチ」](../SETUP.md)を参照。
+手順は[docs/SETUP.md の「rmf_visualization パッチ」](https://github.com/atinfinity/toio_rmf_bringup/blob/main/docs/SETUP.md)を参照。
 
 ### 3. スモークテスト(2端末)
 
@@ -90,7 +90,7 @@ RVizには同じマットのnavグラフ(頂点とレーン)と2台の位置が�
 
 `run_sim` と `use_sim_time` の**両方を `true` にする**のがシミュレーションの
 合図。片方だけだと時刻がずれてタスクが進まない。全引数は
-[README の「主な引数」](../../README.md)にある。
+[README の「主な引数」](https://github.com/atinfinity/toio_rmf_bringup/blob/main/README.md)にある。
 
 ## 確認課題
 

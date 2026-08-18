@@ -86,7 +86,7 @@ ros2 run rmf_demos_tasks dispatch_action -s patrol_D -a delivery_dropoff --use_s
   どう荷役を演出するか)は、コードでなくYAMLに書かれている ── これはRMF
   運用の実務でそのまま効く勘所。
 
-perform_action / delivery の対比は [docs/TASKS.md の dispatch_action](../TASKS.md)
+perform_action / delivery の対比は [docs/TASKS.md の dispatch_action](https://github.com/atinfinity/toio_rmf_bringup/blob/main/docs/TASKS.md)
 にも整理がある。
 
 ## 確認課題

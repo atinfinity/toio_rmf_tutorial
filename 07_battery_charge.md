@@ -45,7 +45,7 @@ stateDiagram-v2
     recharge --> idle: 自機の charger へ帰り充電待機
 ```
 
-図の詳細版は [docs/TASKS.md の ChargeBattery](../TASKS.md) にある。
+図の詳細版は [docs/TASKS.md の ChargeBattery](https://github.com/atinfinity/toio_rmf_bringup/blob/main/docs/TASKS.md) にある。
 
 ## 動かす・観察する
 

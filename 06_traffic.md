@@ -80,7 +80,7 @@ navグラフを**時計回りの一方通行ループ**にしてある。端末A
 ros2 launch toio_rmf_bringup toio_rmf.launch.py mat:=a4 run_sim:=true use_sim_time:=true
 ```
 
-![A4マットのnavグラフ](../images/navgraph_a4.svg)
+![A4マットのnavグラフ](images/navgraph_a4.svg)
 *A3の双方向格子と違い、`approach_1 → patrol_A → approach_2 → patrol_B → approach_1`
 の**時計回り一方通行ループ**。各チャージャーは approach から伸びる双方向の支線の先に
 ぶら下がる。矢印がレーンの向き。*
@@ -98,7 +98,7 @@ ros2 run rmf_demos_tasks dispatch_patrol -p patrol_A patrol_B -n 2 --use_sim_tim
 
 > **A4での2台同時運用は物理限界に近い**。頂点付近で同時に入れ替わると角が
 > 接触しうる。確実な非接触が要るならA3を使う。詳細は
-> [README の「A4での2台同時運用の注意」](../../README.md)を参照。
+> [README の「A4での2台同時運用の注意」](https://github.com/atinfinity/toio_rmf_bringup/blob/main/README.md)を参照。
 
 ## 理解する
 
@@ -114,9 +114,9 @@ ros2 run rmf_demos_tasks dispatch_patrol -p patrol_A patrol_B -n 2 --use_sim_tim
   実務的な勘所。
 - peer costmapのフットプリントを大きくしすぎると、狭いA4では通路を塞いで
   Nav2がデッドロックする。だからマットごとに自動で加減している
-  (この事情は [README の `peer_footprint_size`](../../README.md) に詳しい)。
+  (この事情は [README の `peer_footprint_size`](https://github.com/atinfinity/toio_rmf_bringup/blob/main/README.md) に詳しい)。
 
-二層の詳しい説明は [docs/TASKS.md](../TASKS.md) にもある。
+二層の詳しい説明は [docs/TASKS.md](https://github.com/atinfinity/toio_rmf_bringup/blob/main/docs/TASKS.md) にもある。
 
 ## 確認課題
 

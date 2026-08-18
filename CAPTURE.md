@@ -1,6 +1,6 @@
 # チュートリアル用メディアの撮影手順
 
-`docs/tutorial/images/` に置いているスクリーンショット・動画(GIF)を、
+`images/` に置いているスクリーンショット・動画(GIF)を、
 toio_gazeboシミュレーションから撮り直す/追加する手順。すべてホストの
 X11ディスプレイ上でGazebo・RVizを動かし、画面を取り込む。
 
@@ -25,7 +25,7 @@ ros2 launch toio_rmf_bringup toio_rmf.launch.py mat:=a3 run_sim:=true use_sim_ti
 
 RVizの表示がマット向けに正しく出るには **`rmf_visualization` の small-maps
 パッチ**が必要(未適用だと footprint/vicinity の巨大な円柱がnavグラフを覆う)。
-手順は [../SETUP.md](../SETUP.md) の「rmf_visualization パッチ」を参照。
+手順は [docs/SETUP.md](https://github.com/atinfinity/toio_rmf_bringup/blob/main/docs/SETUP.md) の「rmf_visualization パッチ」を参照。
 
 ## ウィンドウ単位のスクリーンショット
 
@@ -91,9 +91,17 @@ A4マットで撮るときは `Scale` を上げ気味に、`X`/`Y` をA4の中�
 | `06_traffic.gif` | RViz | 2台の交差を18s録画 |
 | `08_delivery.gif` | Gazebo | deliveryを投入し、pickup→dropoffの移動(各地点で約3秒停止)を録画 |
 | `10_footprint_vicinity.png` | RViz | `ScheduleMarkers` の `participant location 0/1` を表示に切り替え、稼働中の円が出た状態 |
-| `10_dashboard_robots.png` | ブラウザ | rmf-webのRobotsタブ。別途コンテナ起動が要る([../DASHBOARD.md](../DASHBOARD.md)) |
+| `10_dashboard_robots.png` | ブラウザ | rmf-webのRobotsタブ。別途コンテナ起動が要る([docs/DASHBOARD.md](https://github.com/atinfinity/toio_rmf_bringup/blob/main/docs/DASHBOARD.md)) |
 
 ### まだ用意していない(必要なら追加)
 
 - `07_battery.*` … シミュレーションでは残量が100%に固定され、ChargeBatteryも
   発火しない([章7](07_battery_charge.md)で実測確認)。撮るなら実機になる
+
+## 図版(SVG)の原本
+
+`images/navgraph_a3.svg` / `navgraph_a4.svg` / `initial_placement_a4.svg` は
+撮影物ではなく手描きのSVGで、原本は
+[toio_rmf_bringup の docs/images/](https://github.com/atinfinity/toio_rmf_bringup/tree/main/docs/images)
+にある(bringup 側の README・SETUP.md・TASKS.md からも参照されるため)。
+変更するときは bringup 側を更新し、このリポジトリへコピーして同期する。

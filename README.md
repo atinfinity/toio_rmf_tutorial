@@ -3,6 +3,11 @@
 ROS 2中級者が、Open-RMFの**フリート処理**(複数ロボットへのタスク割当・入札・
 交通調停・充電管理)を、手を動かしながら段階的に理解するためのチュートリアル。
 
+> [!NOTE]
+> 実行環境(launch・スクリプト・設定)は
+> [toio_rmf_bringup](https://github.com/atinfinity/toio_rmf_bringup) にある。
+> このリポジトリはそのチュートリアル部分(旧 `docs/tutorial/`)を独立させたもの。
+
 「1台をA地点に動かす」から始めて、「2台が入札で仕事を奪い合い、狭いレーンで
 譲り合い、勝手に充電へ帰る」ところまでを1本の動線で登っていく。全ステップを
 **toio_gazeboシミュレーション**で完結させ、最後の章だけ実機への移行差分を扱う。
@@ -15,8 +20,9 @@ ROS 2中級者が、Open-RMFの**フリート処理**(複数ロボットへの�
 
 - **対象**: ROS 2中級者。ノード / トピック / アクション / launch / TF は理解済み。
   Open-RMFは初見でよい。
-- **前提環境**: Ubuntu 24.04 + ROS 2 Jazzy。`~/dev_ws` にこのワークスペースを
-  構築済みであること(未構築なら[章0](00_setup.md)から)。
+- **前提環境**: Ubuntu 24.04 + ROS 2 Jazzy。`~/dev_ws` に
+  [toio_rmf_bringup](https://github.com/atinfinity/toio_rmf_bringup) の
+  ワークスペースを構築済みであること(未構築なら[章0](00_setup.md)から)。
 - **実機は不要**: 章0〜10はシミュレーションのみで完結する。実機(toioキューブと
   Bluetooth)が要るのは[章11](11_real_robot.md)だけ。
 
@@ -73,10 +79,10 @@ ROS 2中級者が、Open-RMFの**フリート処理**(複数ロボットへの�
 
 ## 関連ドキュメント(このチュートリアルの土台)
 
-- [README](../../README.md) ── 起動方法とlaunch引数の一覧
-- [docs/SETUP.md](../SETUP.md) ── 環境構築の詳細と実機検証手順
-- [docs/TASKS.md](../TASKS.md) ── 各タスクの内部シーケンス図解
-- [docs/DASHBOARD.md](../DASHBOARD.md) ── rmf-webダッシュボードの構築
+- [README](https://github.com/atinfinity/toio_rmf_bringup/blob/main/README.md) ── 起動方法とlaunch引数の一覧
+- [docs/SETUP.md](https://github.com/atinfinity/toio_rmf_bringup/blob/main/docs/SETUP.md) ── 環境構築の詳細と実機検証手順
+- [docs/TASKS.md](https://github.com/atinfinity/toio_rmf_bringup/blob/main/docs/TASKS.md) ── 各タスクの内部シーケンス図解
+- [docs/DASHBOARD.md](https://github.com/atinfinity/toio_rmf_bringup/blob/main/docs/DASHBOARD.md) ── rmf-webダッシュボードの構築
 
 このチュートリアルは「動線と観察」に徹し、コマンドの網羅的な引数一覧や内部
 シーケンス図は上記の各ドキュメントへ委ねる。詰まったら該当章から辿ること。

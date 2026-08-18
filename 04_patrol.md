@@ -19,7 +19,7 @@ RMFのロボットは自由空間を好きに動くのではなく、**あらか
 
 6頂点・8レーン、**全レーン双方向**。2台同時運用でも余裕がある。
 
-![A3マットのnavグラフ](../images/navgraph_a3.svg)
+![A3マットのnavグラフ](images/navgraph_a3.svg)
 *6頂点(`patrol_A`〜`patrol_D` と、両端の充電地点 `charger_1`=toio1 /
 `charger_2`=toio2)を双方向レーンで結んだ格子。タスクで指定する `patrol_A` などは
 この頂点名。*
@@ -84,7 +84,7 @@ footprint/vicinity 円は既定で非表示 ── [章10](10_visualization.md)�
 `/fleet_states` や `rmf_task_dispatcher` のログで、`TaskState` が
 `underway`(実行中)→ `completed`(完了)と遷移する。巡回先を1つ訪問する
 ごとに進捗が刻まれる。詳しいシーケンス図は
-[docs/TASKS.md の patrolタスク](../TASKS.md)にある。
+[docs/TASKS.md の patrolタスク](https://github.com/atinfinity/toio_rmf_bringup/blob/main/docs/TASKS.md)にある。
 
 ## 理解する
 
@@ -99,7 +99,7 @@ footprint/vicinity 円は既定で非表示 ── [章10](10_visualization.md)�
   navグラフ上を走るので、帰り道でも交通調停は効く。
 
 フリート設定でこれらがどう定義されているかは、
-[toio_fleet_config_<mat>.yaml](../TASKS.md)(→章7・章9で編集する)にある。
+[toio_fleet_config_<mat>.yaml](https://github.com/atinfinity/toio_rmf_bringup/blob/main/docs/TASKS.md)(→章7・章9で編集する)にある。
 
 ## 確認課題
 

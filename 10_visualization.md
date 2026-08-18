@@ -66,7 +66,7 @@ navグラフ(オレンジ)= RMFの「地図」([章4](04_patrol.md))、マゼン
 > toioのマットは数cm〜数十cm。RMFの可視化は数十m級の建物向けに作られている
 > ため、[章0](00_setup.md)で触れたパッチを当てておかないと、この footprint /
 > vicinity が高さ1m級の巨大な円柱になってnavグラフを覆い隠す(表示した場合)。
-> パッチの背景は [docs/SETUP.md](../SETUP.md) に詳しい。
+> パッチの背景は [docs/SETUP.md](https://github.com/atinfinity/toio_rmf_bringup/blob/main/docs/SETUP.md) に詳しい。
 
 **やってみる**: [章6](06_traffic.md)の2台交差タスクをもう一度投げ、RVizで
 経路帯が2本引かれ、競合区間で片方が待つ/迂回する様子を観察する。CLIログで
@@ -78,7 +78,7 @@ navグラフ(オレンジ)= RMFの「地図」([章4](04_patrol.md))、マゼン
 そのまま動かし、rmf-webだけをコンテナ化する構成。**使わなくても本パッケージ
 の動作には影響しない**ので、GUIを試したい人向け。
 
-構築とトラブルシュートの全ては [docs/DASHBOARD.md](../DASHBOARD.md) に
+構築とトラブルシュートの全ては [docs/DASHBOARD.md](https://github.com/atinfinity/toio_rmf_bringup/blob/main/docs/DASHBOARD.md) に
 あるので、ここでは最短の流れだけ示す。
 
 ### 1. ダッシュボードイメージをビルド(初回のみ)
@@ -126,7 +126,7 @@ RMFコアに繋がっている ── 入口が違うだけ。
 
 > ダッシュボードには既知の注意点(白画面・マーカーがマットを覆う・macOSでの
 > ネットワーク制約など)がいくつかある。詰まったら
-> [docs/DASHBOARD.md のトラブルシュート](../DASHBOARD.md)を先に見ること。
+> [docs/DASHBOARD.md のトラブルシュート](https://github.com/atinfinity/toio_rmf_bringup/blob/main/docs/DASHBOARD.md)を先に見ること。
 
 ## 理解する
 

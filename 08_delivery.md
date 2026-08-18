@@ -84,7 +84,7 @@ ros2 topic echo /dispenser_requests   # 別端末で。pickup到達時に要求�
 ```
 
 荷役の待ち時間は `mock_workcells.py --handle-seconds`(既定3秒)。詳しい
-シーケンス図は [docs/TASKS.md の deliveryタスク](../TASKS.md)にある。
+シーケンス図は [docs/TASKS.md の deliveryタスク](https://github.com/atinfinity/toio_rmf_bringup/blob/main/docs/TASKS.md)にある。
 
 **注意**: 標準の delivery では**キューブのLED・効果音は出ない**。pickup /
 dropoff はワークセル側で完結し、フリートのアクション(`delivery_pickup` /

@@ -90,7 +90,7 @@ footprint/vicinity 円は既定で非表示 ── [章10](10_visualization.md)�
 
 - **patrol = 「移動フェーズ」の繰り返し**。go_to_place(章3)の移動を、
   指定地点ぶん・指定周回ぶん並べたもの。RMFのタスクがフェーズの列だという
-  感覚が、ここで補強される。
+  感覚を、ここでも確認できる。
 - **navグラフはフリート全体で共有される地図**。2台とも同じ頂点・レーンを
   使うので、同じレーンを取り合う状況が起きる ── その調停が章6。
 - **`finishing_request` はフリートの「片付け」ポリシー**。タスクが終わった
@@ -98,7 +98,7 @@ footprint/vicinity 円は既定で非表示 ── [章10](10_visualization.md)�
   toioは `charge`(チャージャーへ帰す)。この帰還も1つのタスクとして
   navグラフ上を走るので、帰り道でも交通調停は効く。
 
-フリート設定でこれらがどう定義されているかは、
+フリート設定でのこれらの定義は、
 [toio_fleet_config_<mat>.yaml](https://github.com/atinfinity/toio_rmf_bringup/blob/main/docs/TASKS.md)(→章7・章9で編集する)にある。
 
 ## 確認課題

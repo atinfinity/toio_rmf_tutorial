@@ -86,7 +86,7 @@ TF待ちのタイムアウトは toio_navigation の `nav2_params.yaml` で **30
 A4のチャージャー頂点には `dock_name` が設定されており、到着の最終区間が
 **Dockイベント**になる。ここではNav2に任せず、**キューブ内蔵のターゲット
 走行**で精密に停止する(toio_fleet_adapter#3)。シミュレーションにはdock
-サーバが無いためNav2の結果だけで完了していた ── 実機ならではの精密停止。
+サーバが無いため、Nav2の結果だけで完了していた。
 
 A4のnavグラフ(一方通行ループ + チャージャーは支線の先)の形は
 [章6](06_traffic.md)と[docs/TASKS.md](https://github.com/atinfinity/toio_rmf_bringup/blob/main/docs/TASKS.md)で見たとおり。チャージャーを

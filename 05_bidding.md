@@ -61,11 +61,11 @@ ros2 run rmf_demos_tasks dispatch_patrol -p patrol_D patrol_B -n 1 -F toio -R to
 
 **観察**: 近くにtoio1がいても、指名したtoio2が動く。ログに入札(BidNotice/
 BidResponse)が**現れない**ことを確認する ── これが直接割当(`robot_task_request`)。
-「安い方が勝つ」原則を、指名は上書きする。
+指名は「安い方が勝つ」という原則を上書きする。
 
 CLIの応答を見ると、指名と入札の違いがはっきり出る。`-R` 付き(指名)は
-`robot_task_request` で応答に `assigned_to` がそのまま入り、`-R` 無し(入札)は
-`dispatch_task_request` になってフリートへ入札に回る:
+`robot_task_request` で、応答に `assigned_to` がそのまま入る。`-R` 無し(入札)は
+`dispatch_task_request` になり、フリートへ入札に回る:
 
 ![指名 vs 入札のCLI応答](images/05_bidding_log.png)
 *上: 指名(`robot_task_request` → `assigned_to: toio1`)。下: 入札(`dispatch_task_request` → フリートが落札者を決める)。toio_gazeboでの実出力。*
@@ -89,8 +89,8 @@ ros2 launch toio_rmf_bringup toio_rmf.launch.py mat:=a3 run_sim:=true use_sim_ti
 
 - **タスク割当 = 入札で決まる**。RMFのマルチロボット運用の土台がこれ。
   ロボットを増やしても仕組みは同じで、一番安く実現できる1台が選ばれる。
-- **見積もりの中身**は到達時刻とバッテリ消費。だから入札は「今どこにいるか」
-  「バッテリはどれだけあるか」に影響される ── 章7の充電状態とも絡む
+- **見積もりの中身**は到達時刻とバッテリ消費。だから入札の結果は「今どこにいるか」
+  「バッテリはどれだけあるか」で変わる ── 章7の充電状態とも絡む
   (バッテリの減ったロボットは不利になりうる)。
 - **指名は入札を上書きする運用の逃げ道**。「この1台を確実に」なら `-F -R`。
   デモや検証で特定の1台を動かしたいときに使う。実機の1台ずつ検証

@@ -28,8 +28,8 @@
 「荷役して」と要求を投げ、ワークセルが「完了」を返したら次へ進む。
 
 toioのマットに実際に運べる物は無いので、`toio_rmf.launch.py` が
-**mockワークセル**(`toio_dispenser` / `toio_ingestor`)を起動し、要求に対して
-一定時間後に「完了」を返す(実際には何も運ばない)。これは
+**mockワークセル**(`toio_dispenser` / `toio_ingestor`)を起動する。要求に対して
+一定時間後に「完了」を返すだけで、実際には何も運ばない。これは
 [章2](02_architecture.md)で `ros2 node list` に出ていたノード。
 
 ## 補足: 環境による既知問題(Ubuntuでは無関係)
@@ -43,8 +43,8 @@ toioのマットに実際に運べる物は無いので、`toio_rmf.launch.py` �
 `rmf_task_sequence` の `std::optional<nlohmann::json>` の ABI 不整合で
 fleet_adapter が異常終了する既知の問題がある
 ([#20](https://github.com/atinfinity/toio_rmf_bringup/issues/20))。原因は
-ライブラリ間の nlohmann コンパイル定義(`JSON_DIAGNOSTICS` 等)の食い違いで、
-**一貫ビルドされた apt deb では再現しない**。この章は Ubuntu 前提なので、
+ライブラリ間の nlohmann コンパイル定義(`JSON_DIAGNOSTICS` 等)の食い違いにある。
+**一貫ビルドされた apt deb では再現しない。** この章は Ubuntu 前提なので、
 通常この問題には遭遇しない。
 
 ## 動かす
@@ -93,7 +93,7 @@ dropoff はワークセル側で完結し、フリートのアクション(`deli
 
 ## 理解する
 
-- **タスク = フェーズの列**、が最もはっきり見えるのが delivery。
+- delivery では**タスク = フェーズの列**という構造が最もはっきり見える。
   「移動フェーズ → 荷役フェーズ → 移動フェーズ → 荷役フェーズ」と積まれて
   いる。go_to_place(移動1つ)、patrol(移動の繰り返し)からの発展として
   捉えると一貫する。

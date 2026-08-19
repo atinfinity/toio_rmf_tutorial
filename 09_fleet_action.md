@@ -64,8 +64,8 @@ ros2 run rmf_demos_tasks dispatch_action -s patrol_D -a delivery_dropoff --use_s
 
 **やってみる**: `delivery_pickup` の保持時間を長くする、LEDの色を変える、
 などを1つ試して、`dispatch_action` で挙動が変わることを確認する。
-**フリートの振る舞いは設定ファイルで決まっている**という感覚 ── 章7で
-`recharge_threshold` をいじったのと同じ ── がここで強まる。
+章7で `recharge_threshold` をいじったときと同じく、
+**フリートの振る舞いは設定ファイルで決まっている**という感覚がここでも強まる。
 
 > どのキー(保持秒・色・効果音)がどれに対応するかは、実ファイルの
 > `toio.actions` を開いて確かめること。このチュートリアルはコマンド操作を
@@ -83,8 +83,8 @@ ros2 run rmf_demos_tasks dispatch_action -s patrol_D -a delivery_dropoff --use_s
   側で定義してRMFに載せられる。toioでは「LEDと音」という無害な例だが、実機
   ロボットなら「アームで掴む」「扉を開ける」などをここに実装する。
 - 章7・本章で**設定ファイルを2回いじった**。フリートの人格(いつ充電するか、
-  どう荷役を演出するか)は、コードでなくYAMLに書かれている ── これはRMF
-  運用の実務でそのまま効く勘所。
+  どう荷役を演出するか)は、コードでなくYAMLに書かれている。これはRMF
+  運用の実務でもそのまま役立つ勘所。
 
 perform_action / delivery の対比は [docs/TASKS.md の dispatch_action](https://github.com/atinfinity/toio_rmf_bringup/blob/main/docs/TASKS.md)
 にも整理がある。

@@ -81,7 +81,7 @@ ros2 topic echo /fleet_states --once
 
 したがって **ChargeBattery の自動発火は実機で検証する**(キューブの `battery_state`
 が実際に放電する)。手順は[章11](11_real_robot.md)と
-[issue #35](https://github.com/atinfinity/toio_rmf_bringup/issues/35)。sim で確認
+[issue #35](https://github.com/atinfinity/toio_rmf_bringup/issues/35)にある。sim で確認
 できる充電まわりの挙動は、次の **finishing_request による完了後の帰還**である。
 
 ### 3. 完了後の自動帰還を見る(finishing_request)

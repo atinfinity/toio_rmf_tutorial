@@ -113,8 +113,8 @@ ros2 run rmf_demos_tasks dispatch_patrol -p patrol_A patrol_B -n 2 --use_sim_tim
   「**地図の作り方が渋滞の起きやすさを決める**」という、フリート運用の
   実務的な勘所。
 - peer costmapのフットプリントを大きくしすぎると、狭いA4では通路を塞いで
-  Nav2がデッドロックする。だからマットごとに自動で加減している
-  (この事情は [README の `peer_footprint_size`](https://github.com/atinfinity/toio_rmf_bringup/blob/main/README.md) に詳しい)。
+  Nav2がデッドロックする。だからマットごとに自動で加減している。詳細は
+  [README の `peer_footprint_size`](https://github.com/atinfinity/toio_rmf_bringup/blob/main/README.md) を参照。
 
 二層の詳しい説明は [docs/TASKS.md](https://github.com/atinfinity/toio_rmf_bringup/blob/main/docs/TASKS.md) にもある。
 

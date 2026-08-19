@@ -11,9 +11,9 @@
 
 ## RVizで何が見えているか ── マーカーの読み方
 
-`toio_rmf.launch.py` は既定でRVizを起動する。真上から見た絵に色々な図形が
-重なって見えるが、**一つ一つが別のトピックから来る「フリート処理の内部状態」**
-で、それぞれ担当ノードが違う。まず**待機中**(idle)の絵から:
+`toio_rmf.launch.py` は既定でRVizを起動する。真上から見た絵にはさまざまな図形が
+重なっているが、**それぞれ別のトピックから来る「フリート処理の内部状態」**
+で、担当ノードも異なる。まず**待機中**(idle)の絵から:
 
 ![RViz待機時: navグラフと2台](images/00_setup_rviz.png)
 *待機中 ── navグラフ(オレンジ)と2台のロボット(マゼンタ)がチャージャー上にいる。*
@@ -47,12 +47,12 @@ navグラフ(オレンジ)= RMFの「地図」([章4](04_patrol.md))、マゼン
 > **なぜ teal/黄(footprint/vicinity)を既定で隠しているか**
 >
 > これらは**スケジュール(=予約)軌道上の位置**に描かれ、**実機(マゼンタ)の
-> 現在位置とは別物**。ロボットが方向転換のたびに一瞬止まる(RPPの
-> `use_rotate_to_heading`)ため予約軌道から遅れては追いつき、その差で teal/黄の
-> 円が前後に**跳ねて見える**(実機自体は滑らか。実測で確認済み)。混乱を避けるため
-> `rviz/toio_rmf.rviz` の `ScheduleMarkers` で namespace `participant location *`
-> を `false` にして**既定で非表示**にしている。緑の予約経路帯(`participant *`)は
-> 残している。
+> 現在位置とは別物**。ロボットは方向転換のたびに一瞬止まるため(RPPの
+> `use_rotate_to_heading`)、予約軌道に対して遅れたり追いついたりを繰り返す。
+> その差で teal/黄の円が前後に**跳ねて見える**(実機自体の動きは滑らかで、
+> 実測でも確認済み)。混乱を避けるため `rviz/toio_rmf.rviz` の `ScheduleMarkers`
+> で namespace `participant location *` を `false` にして**既定で非表示**にしている。
+> 緑の予約経路帯(`participant *`)は残している。
 >
 > **再表示したい場合**: RVizの `ScheduleMarkers` 表示を開き `participant location 0/1`
 > のチェックを入れる(または当該 namespace を `true` にする)。有効化すると、稼働中の

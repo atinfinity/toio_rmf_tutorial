@@ -103,6 +103,11 @@ ros2 run rmf_demos_tasks cancel_task -id <task_id>
 - `task_id` は投入時のCLI出力、または `rmf_task_dispatcher` のログに出る
 - **`cancel_task` は `--use_sim_time` を受け付けない**(`-id` のみ)。
   このチュートリアルで唯一 `--use_sim_time` を付けないコマンド。
+- **`cancel_task` は実行後プロンプトに戻らず止まったように見える**。これは
+  `rmf_demos_tasks` の仕様で、キャンセル要求を publish した後にそのまま待受へ
+  入るため。**キャンセル自体は送信済み**なので、`Ctrl-C` で抜けてよい。抜けた
+  あとロボットがチャージャーへ戻れば成功。
+  (詰まったら [TROUBLESHOOTING.md](TROUBLESHOOTING.md) も参照)
 
 **やってみる**: 長いpatrolを投げ、途中で `cancel_task -id <task_id>` する。
 ロボットが巡回をやめてチャージャーへ帰るのを確認する。

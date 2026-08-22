@@ -58,6 +58,34 @@ ffmpeg -y -i /tmp/clip.mp4 -i /tmp/pal.png \
 タスク完了後に撮ると静止画になる(GIFがほとんど変化せず数KBほどのファイルに
 なっていたら、これが原因)。
 
+## 合成GIF(左RViz / 右Gazebo)
+
+`04_patrol.gif` / `06_traffic.gif` は **RViz と Gazebo を左右に並べた合成GIF**。
+「スケジュール(RViz)」と「実際のキューブの動き(Gazebo)」を同時に見せるため。
+`ffmpeg` が使えない環境向けに、Python だけで撮影・合成する手順も用意した。
+
+```bash
+pip install --user mss imageio python-xlib   # 画面グラブ / GIF / ウィンドウ操作
+```
+
+1. **Gazebo ウィンドウを前面化**して連番PNGにグラブ(`python-xlib` の
+   `_NET_ACTIVE_WINDOW` で raise → `mss` で矩形grab → 3Dビュー部分を crop)。
+   ヘッドレス寄りの環境でも、実GPU付きの X(`:1`)なら Gazebo GUI は描画される。
+2. タスク投入 → 数秒(交通調停なら約5秒)待って走り出してから **10fps で
+   180フレーム(=18秒)** グラブ。`traffic` は片道で終わると後半が静止するので、
+   2台を **逆向きに周回**(例: `patrol_B patrol_C` と `patrol_C patrol_B`)させて
+   全編クロスし続ける画にする。
+3. 既存の RViz GIF を左パネル、Gazebo連番を右パネルに置いて横並び合成し、
+   ラベル(`RViz2` / `Gazebo`)を焼き込む(Pillow)。
+4. **GIF軽量化のコツ**: 静止部の微小レンダノイズで色indexがブレるとフレーム間
+   圧縮が効かず数MBに膨れる。`ImageOps.posterize(5)` でノイズを丸め、共有パレット
+   ・**ディザ無効**・**`disposal=1`**(前フレームに差分だけ上書き)で保存すると、
+   180フレームでも 1〜1.5MB に収まる。
+
+> RViz 側は既存の(small-mapsパッチ適用済みの)綺麗なGIFを再利用し、Gazebo側
+> だけ撮り直して合成している。2つのパネルは別走行のため厳密なフレーム同期は
+> していない(どちらも同じ挙動を映す図として並べている)。
+
 ## RViz のカメラ(フィット/センタリング)
 
 `rviz/toio_rmf.rviz` の `Views > Current`(TopDownOrtho)で決まる:
@@ -86,10 +114,10 @@ A4マットで撮るときは `Scale` を上げ気味に、`X`/`Y` をA4の中�
 | `00_setup_rviz.png` | RViz | 同上のnavグラフ全景(idle) |
 | `03_go_to_place.gif` | Gazebo | `dispatch_go_to_place` で1台を指名し、目的地に着いて停止するまでを録画 |
 | `04_patrol_rviz.png` | RViz | patrol投入後、スケジュール経路帯が出た瞬間 |
-| `04_patrol.gif` | RViz | patrol走行を16s録画 |
+| `04_patrol.gif` | RViz+Gazebo(合成) | patrol走行を左RViz/右Gazeboで並べた合成GIF(下記「合成GIF」参照) |
 | `05_bidding_log.png` | 端末風PNG | `dispatch_patrol` の `-R`有/無 の実出力を並べて描画(`scripts`外の生成物) |
 | `06_traffic_rviz.png` | RViz | 2台に別タスクを投入、経路帯が交錯した瞬間 |
-| `06_traffic.gif` | RViz | 2台の交差を18s録画 |
+| `06_traffic.gif` | RViz+Gazebo(合成) | 2台の交差を左RViz/右Gazeboで並べた合成GIF(下記「合成GIF」参照) |
 | `08_delivery.gif` | Gazebo | deliveryを投入し、pickup→dropoffの移動(各地点で約3秒停止)を録画 |
 | `10_footprint_vicinity.png` | RViz | `ScheduleMarkers` の `participant location 0/1` を表示に切り替え、稼働中の円が出た状態 |
 | `10_dashboard_robots.png` | ブラウザ | rmf-webのRobotsタブ。別途コンテナ起動が要る([docs/DASHBOARD.md](https://github.com/atinfinity/toio_rmf_bringup/blob/main/docs/DASHBOARD.md)) |

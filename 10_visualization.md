@@ -11,9 +11,9 @@
 
 ## RVizで何が見えているか ── マーカーの読み方
 
-`toio_rmf.launch.py` は既定でRVizを起動する。真上から見た絵に色々な図形が
-重なって見えるが、**一つ一つが別のトピックから来る「フリート処理の内部状態」**
-で、それぞれ担当ノードが違う。まず**待機中**(idle)の絵から:
+`toio_rmf.launch.py` は既定でRVizを起動する。真上から見た絵には複数の図形が
+重なっている。**それぞれ別のトピックから来る「フリート処理の内部状態」**
+で、担当ノードも異なる。まず**待機中**(idle)の絵から:
 
 ![RViz待機時: navグラフと2台](images/00_setup_rviz.png)
 *待機中 ── navグラフ(オレンジ)と2台のロボット(マゼンタ)がチャージャー上にいる。*
@@ -29,8 +29,8 @@
 | **グレーの矩形(黒枠)** | 床面図(floorplan) | マットの外形 | `/floorplan`(building_map_server) |
 | 細いグレーの**方眼** | Grid | RVizの目盛り(5cm刻み)。**マーカーではない** | RViz内蔵 |
 
-navグラフ(オレンジ)= RMFの「地図」([章4](04_patrol.md))、マゼンタの球 =
-フリートの「自己申告」([章2](02_architecture.md))。**タスクを投げると、ここに
+navグラフ(オレンジ)はRMFの「地図」([章4](04_patrol.md))を表し、マゼンタの球は
+フリートの「自己申告」([章2](02_architecture.md))を表す。**タスクを投げると、ここに
 "稼働中"のマーカーが増える**:
 
 ![RViz走行時: スケジュール経路帯と稼働マーカー](images/04_patrol_rviz.png)
@@ -39,20 +39,20 @@ navグラフ(オレンジ)= RMFの「地図」([章4](04_patrol.md))、マゼン
 | 見た目 | 名前 | 意味 | 出どころ(トピック) |
 |---|---|---|---|
 | **緑の帯** | スケジュール(schedule) | `rmf_traffic_schedule` が予約した**将来の走行経路**。稼働中のロボットにだけ出る。2台が競合するとここで譲り合いが見える([章6](06_traffic.md)) | `/schedule_markers`(ns `participant N`) |
-| **teal/黄の円**(vicinity / footprint) | 予約軌道上の周辺域・占有域 | **既定では非表示**(下記)。スケジュールが予約した**軌道上の位置**に描かれる ── vicinity=他機への「近づくな」領域、footprint=占有面積 | `/schedule_markers`(ns `participant location N`) |
+| **teal/黄の円**(vicinity / footprint) | 予約軌道上の周辺域・占有域 | **既定では非表示**(下記)。スケジュールが予約した**軌道上の位置**に描かれる ── vicinityは他機への「近づくな」領域、footprintは占有面積を指す | `/schedule_markers`(ns `participant location N`) |
 
-つまり色で層が分かれている ── **オレンジ=地図(静的)、マゼンタ=ロボットの
-実位置、緑=いま走っているロボットの予約経路(動的)**。
+つまり色で層が分かれている ── **オレンジは地図(静的)、マゼンタはロボットの
+実位置、緑はいま走っているロボットの予約経路(動的)を示す**。
 
 > **なぜ teal/黄(footprint/vicinity)を既定で隠しているか**
 >
-> これらは**スケジュール(=予約)軌道上の位置**に描かれ、**実機(マゼンタ)の
-> 現在位置とは別物**。ロボットが方向転換のたびに一瞬止まる(RPPの
-> `use_rotate_to_heading`)ため予約軌道から遅れては追いつき、その差で teal/黄の
-> 円が前後に**跳ねて見える**(実機自体は滑らか。実測で確認済み)。混乱を避けるため
-> `rviz/toio_rmf.rviz` の `ScheduleMarkers` で namespace `participant location *`
-> を `false` にして**既定で非表示**にしている。緑の予約経路帯(`participant *`)は
-> 残している。
+> これらは**スケジュール(予約)軌道上の位置**に描かれ、**実機(マゼンタ)の
+> 現在位置とは別物**。ロボットは方向転換のたびに一瞬止まるため(RPPの
+> `use_rotate_to_heading`)、予約軌道に対して遅れたり追いついたりを繰り返す。
+> その差で teal/黄の円が前後に**跳ねて見える**(実機自体の動きは滑らかで、
+> 実測でも確認済み)。混乱を避けるため `rviz/toio_rmf.rviz` の `ScheduleMarkers`
+> で namespace `participant location *` を `false` にして**既定で非表示**にしている。
+> 緑の予約経路帯(`participant *`)は残している。
 >
 > **再表示したい場合**: RVizの `ScheduleMarkers` 表示を開き `participant location 0/1`
 > のチェックを入れる(または当該 namespace を `true` にする)。有効化すると、稼働中の
@@ -61,7 +61,7 @@ navグラフ(オレンジ)= RMFの「地図」([章4](04_patrol.md))、マゼン
 ![footprint/vicinityを有効化したRViz](images/10_footprint_vicinity.png)
 *参考:`participant location` を表示した状態。2台のロボットに teal の vicinity と
 黄の footprint の円が描かれる(既定ではこれらを非表示にしている。本チュートリアルの
-他のスクリーンショット・動画は既定=非表示で撮影している)。*
+他のスクリーンショット・動画は既定で非表示にした状態で撮影している)。*
 
 > toioのマットは数cm〜数十cm。RMFの可視化は数十m級の建物向けに作られている
 > ため、[章0](00_setup.md)で触れたパッチを当てておかないと、この footprint /

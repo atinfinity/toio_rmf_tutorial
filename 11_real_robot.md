@@ -86,7 +86,7 @@ TF待ちのタイムアウトは toio_navigation の `nav2_params.yaml` で **30
 A4のチャージャー頂点には `dock_name` が設定されており、到着の最終区間が
 **Dockイベント**になる。ここではNav2に任せず、**キューブ内蔵のターゲット
 走行**で精密に停止する(toio_fleet_adapter#3)。シミュレーションにはdock
-サーバが無いためNav2の結果だけで完了していた ── 実機ならではの精密停止。
+サーバが無いため、Nav2の結果だけで完了していた。
 
 A4のnavグラフ(一方通行ループ + チャージャーは支線の先)の形は
 [章6](06_traffic.md)と[docs/TASKS.md](https://github.com/atinfinity/toio_rmf_bringup/blob/main/docs/TASKS.md)で見たとおり。チャージャーを
@@ -110,7 +110,7 @@ ros2 run rmf_demos_tasks dispatch_go_to_place -p charger_2 -F toio -R toio1
 > 角接触)。確実な非接触が要る検証はA3、という判断は[章6](06_traffic.md)で
 > 見たとおり。2台同時は接触リスクを認識のうえで。
 
-実機ではここで**LEDと効果音**([章9](09_fleet_action.md))が実際に見える。
+実機ではここで**LEDと効果音**([章9](09_fleet_action.md))が実際に確認できる。
 バッテリも実測値([章7](07_battery_charge.md)、10%刻み)で動く。シミュレー
 ションで「仕組み」を、実機で「手触り」を得る、という構成の締めくくり。
 

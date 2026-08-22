@@ -25,7 +25,7 @@ flowchart TB
 - **大域**は「予定」の調整。誰がいつどのレーンを通るかを事前に予約し、
   かち合うなら先着を通して後発を待たせる。
 - **局所**は「現場」の回避。予定どおりでも近づきすぎたら、Nav2が相手を
-  障害物として膨らませて(costmap)ぶつからないよう避ける。
+  costmap上で障害物として膨らませ、ぶつからないよう避ける。
 
 この二層があるので、**大域で順番を決めつつ、局所で詰めの安全**を取る。
 peer costmapのフットプリント(相手をどれだけ大きく見るか)は `mat` に応じて
@@ -67,7 +67,7 @@ ros2 run rmf_demos_tasks dispatch_go_to_place -p charger_1 -F toio -R toio2 --us
 ros2 topic echo /fleet_states
 ```
 
-一方が `moving`、他方が待ちで速度が落ちる/止まる、という状態変化が
+一方が `moving`、他方は待ちに入り速度が落ちるか止まる、という状態変化が
 読める。**「入札で誰がやるか」を決めた後、走行中は交通調停が順番を捌く**
 ── 章5との役割の違いがここではっきりする。
 
@@ -113,8 +113,8 @@ ros2 run rmf_demos_tasks dispatch_patrol -p patrol_A patrol_B -n 2 --use_sim_tim
   「**地図の作り方が渋滞の起きやすさを決める**」という、フリート運用の
   実務的な勘所。
 - peer costmapのフットプリントを大きくしすぎると、狭いA4では通路を塞いで
-  Nav2がデッドロックする。だからマットごとに自動で加減している
-  (この事情は [README の `peer_footprint_size`](https://github.com/atinfinity/toio_rmf_bringup/blob/main/README.md) に詳しい)。
+  Nav2がデッドロックする。だからマットごとに自動で加減している。詳細は
+  [README の `peer_footprint_size`](https://github.com/atinfinity/toio_rmf_bringup/blob/main/README.md) を参照。
 
 二層の詳しい説明は [docs/TASKS.md](https://github.com/atinfinity/toio_rmf_bringup/blob/main/docs/TASKS.md) にもある。
 

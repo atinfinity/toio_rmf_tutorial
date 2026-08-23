@@ -40,6 +40,19 @@
   `Add Task [...] to a bidding queue`。数秒待っても出なければ同じコマンドを
   もう一度投げる(重複して届くことはない。1 本目は消えている)
 
+## ロボットが `Waiting to lock mutex groups [...]` のまま動かない
+
+A4 の navグラフはループ全体が mutex group `ring` に入っている
+([toio_rmf_maps#16](https://github.com/atinfinity/toio_rmf_maps/pull/16))。mutex の
+取得は RMF の `mutex_group_supervisor` ノードが仲介するので、これが起動していないと
+誰も保持していない group を永遠に待つ。
+
+- `ros2 node list | grep mutex_group_supervisor` で居るか確認する
+- toio_rmf_bringup を [#60](https://github.com/atinfinity/toio_rmf_bringup/pull/60)
+  以降に更新する(`toio_rmf.launch.py` が起動するようになった)
+- 2台目が `... but that mutex is currently held by [toio/toio1]` と出しているなら
+  正常な待ち(ループ上に1台ずつ)。1台目がチャージャーへ戻れば動き出す
+
 ## `/fleet_states` を `echo` しても何も出ない
 
 **症状**: `ros2 topic echo /fleet_states --once` が

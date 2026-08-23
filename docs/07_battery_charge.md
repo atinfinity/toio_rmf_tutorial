@@ -101,9 +101,12 @@ ros2 topic echo /fleet_states --once
 >
 > ```bash
 > ros2 launch toio_rmf_bringup toio_rmf.launch.py mat:=a3 run_sim:=true \
->   use_sim_time:=true publish_battery:=true battery_discharge_rate:=0.02
+>   use_sim_time:=true publish_battery:=true battery_discharge_rate:=0.02 \
+>   battery_quantize_steps:=0
 > ```
 >
+> 報告される残量は既定で**10%刻み**(実機のキューブに合わせている)。上のGIFの
+> ように滑らかなバーで見たいときは `battery_quantize_steps:=0` を付ける。
 > 仕組みと引数は [toio_gazebo の「Battery and Open-RMF ChargeBattery」](https://github.com/atinfinity/toio_gazebo/blob/main/docs/topics.md#battery-and-open-rmf-chargebattery)。
 > なお実機の残量検証は引き続き実機で行う(上の[!NOTE])。
 

@@ -25,6 +25,21 @@
 
 ---
 
+## 起動直後に投げた最初のタスクが動かない(CLI は成功を返す)
+
+`Managed nodes are active` が 2 つ出た直後(25 秒以内)に投げた 1 本目の
+`rmf_demos_tasks` 要求が、どこにも届かずに消えることがある。CLI は要求を
+1 回 publish して終了するので、DDS の discovery が終わる前だと dispatcher /
+フリートアダプタにマッチしないまま捨てられる
+([toio_rmf_bringup#55](https://github.com/atinfinity/toio_rmf_bringup/issues/55))。
+実機の RMF スタックは参加者が約 60 あり、discovery に 10〜25 秒かかる。
+
+- 起動後 25 秒ほど待ってから最初のタスクを投げる
+- 届いたかは端末Aのログで分かる: 指名(`-R`)なら
+  `Direct request [...] successfully queued for robot [toioN]`、未指名なら
+  `Add Task [...] to a bidding queue`。数秒待っても出なければ同じコマンドを
+  もう一度投げる(重複して届くことはない。1 本目は消えている)
+
 ## `/fleet_states` を `echo` しても何も出ない
 
 **症状**: `ros2 topic echo /fleet_states --once` が

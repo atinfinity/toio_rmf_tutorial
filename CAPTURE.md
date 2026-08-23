@@ -58,6 +58,39 @@ ffmpeg -y -i /tmp/clip.mp4 -i /tmp/pal.png \
 タスク完了後に撮ると静止画になる(GIFがほとんど変化せず数KBほどのファイルに
 なっていたら、これが原因)。
 
+## 合成GIF(左RViz / 右Gazebo)
+
+`04_patrol.gif` / `06_traffic.gif` は **RViz と Gazebo を左右に並べた合成GIF**。
+「スケジュール(RViz)」と「実際のキューブの動き(Gazebo)」を同時に見せるため。
+**同一走行から RViz と Gazebo の両ウィンドウを毎フレーム同時にグラブ**するので、
+左右のパネルはフレーム単位で同期する。`ffmpeg` が使えない環境向けに、Python
+だけで撮影・合成する手順も用意した。
+
+```bash
+pip install --user mss imageio python-xlib   # 画面グラブ / GIF / ウィンドウ操作
+```
+
+前提: RViz をマットスケールで綺麗に写すため、**`rmf_visualization` の small-maps
+パッチ**を適用しておく([docs/SETUP.md](https://github.com/atinfinity/toio_rmf_bringup/blob/main/docs/SETUP.md))。
+未適用だと footprint/vicinity の巨大マーカーがnavグラフを覆う。
+
+1. sim を GUI 付きで起動(`toio_rmf.launch.py` を `rmf_headless` を付けずに実行 →
+   Gazebo GUI と RMF可視化 RViz が両方 `:1` に出る)。実GPU付きの X(`:1`)なら
+   ヘッドレス寄りの環境でも GUI は描画される。
+2. **2つのウィンドウを重ならないように左右へ配置**(`python-xlib` の
+   `_NET_MOVERESIZE_WINDOW` / `_NET_ACTIVE_WINDOW`)。
+3. タスク投入 → 数秒(交通調停なら約5秒)待って走り出してから、**毎フレーム
+   RViz と Gazebo の両矩形を `mss` でグラブ**して連番PNGのペアで保存
+   (10fps × 180フレーム=18秒、それぞれ描画部分を crop)。`traffic` は片道で
+   終わると後半が静止するので、2台を **逆向きに周回**(例: `patrol_B patrol_C` と
+   `patrol_C patrol_B`)させて全編クロスし続ける画にする。
+4. RViz を左、Gazebo を右に置いて横並び合成し、ラベル(`RViz2` / `Gazebo`)を
+   焼き込む(Pillow)。両パネルは同じフレーム番号=同時刻なので同期する。
+5. **GIF軽量化のコツ**: 静止部の微小レンダノイズで色indexがブレるとフレーム間
+   圧縮が効かず数MBに膨れる。`ImageOps.posterize(5)` でノイズを丸め、共有パレット
+   ・**ディザ無効**・**`disposal=1`**(前フレームに差分だけ上書き)で保存すると、
+   180フレームでも 1〜2MB に収まる。
+
 ## RViz のカメラ(フィット/センタリング)
 
 `rviz/toio_rmf.rviz` の `Views > Current`(TopDownOrtho)で決まる:
@@ -86,10 +119,10 @@ A4マットで撮るときは `Scale` を上げ気味に、`X`/`Y` をA4の中�
 | `00_setup_rviz.png` | RViz | 同上のnavグラフ全景(idle) |
 | `03_go_to_place.gif` | Gazebo | `dispatch_go_to_place` で1台を指名し、目的地に着いて停止するまでを録画 |
 | `04_patrol_rviz.png` | RViz | patrol投入後、スケジュール経路帯が出た瞬間 |
-| `04_patrol.gif` | RViz | patrol走行を16s録画 |
+| `04_patrol.gif` | RViz+Gazebo(合成) | patrol走行を左RViz/右Gazeboで並べた合成GIF(下記「合成GIF」参照) |
 | `05_bidding_log.png` | 端末風PNG | `dispatch_patrol` の `-R`有/無 の実出力を並べて描画(`scripts`外の生成物) |
 | `06_traffic_rviz.png` | RViz | 2台に別タスクを投入、経路帯が交錯した瞬間 |
-| `06_traffic.gif` | RViz | 2台の交差を18s録画 |
+| `06_traffic.gif` | RViz+Gazebo(合成) | 2台の交差を左RViz/右Gazeboで並べた合成GIF(下記「合成GIF」参照) |
 | `08_delivery.gif` | Gazebo | deliveryを投入し、pickup→dropoffの移動(各地点で約3秒停止)を録画 |
 | `10_footprint_vicinity.png` | RViz | `ScheduleMarkers` の `participant location 0/1` を表示に切り替え、稼働中の円が出た状態 |
 | `10_dashboard_robots.png` | ブラウザ | rmf-webのRobotsタブ。別途コンテナ起動が要る([docs/DASHBOARD.md](https://github.com/atinfinity/toio_rmf_bringup/blob/main/docs/DASHBOARD.md)) |

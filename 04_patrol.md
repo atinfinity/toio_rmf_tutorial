@@ -60,8 +60,10 @@ patrol実行中のRViz。緑の帯が `rmf_traffic_schedule` に予約された�
 *緑の帯が予約された経路。toio1が巡回中、toio2は `charger_2` で待機。(スケジュールの
 footprint/vicinity 円は既定で非表示 ── [章10](10_visualization.md)参照)*
 
-![patrol走行のアニメーション](images/04_patrol.gif)
-*toio1が巡回先を順に訪問していく様子(toio_gazebo)。*
+![patrol走行のアニメーション(左: RViz2 / 右: Gazebo)](images/04_patrol.gif)
+*同じ patrol 走行を2つのビューで並べたもの。左が RViz2(RMFスケジュール可視化 ──
+navグラフ・ロボット・予約経路)、右が toio_gazebo(マット上の実際のキューブの動き)。
+toio1が巡回先を順に訪問していく。*
 
 ### 1. 周回と帰還を目で追う
 

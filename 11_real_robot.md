@@ -146,8 +146,24 @@ A4は狭く(0.30×0.20m)、2台同時運用は物理限界に近い(頂点付近
 - **2本目は1本目から30秒以上空ける**
 - **1台目が向かっていない頂点**を2本目に指定する
 
-8秒後に同じ頂点へ投げると接触する(最接近 27 mm、
+8秒後に同じ頂点へ投げると接触した(最接近 27 mm、
 [toio_rmf_bringup#56](https://github.com/atinfinity/toio_rmf_bringup/issues/56))。
+
+この接触は [toio_rmf_maps#16](https://github.com/atinfinity/toio_rmf_maps/pull/16) で
+**ループ全体を mutex group `ring`** にして地図側で塞いである。ループ上に居られるのは
+常に1台で、2本目のタスクを受けたロボットは端末2に
+
+```
+[toio/toio2] is waiting to lock mutex group [ring] but that mutex is currently held by [toio/toio1]
+```
+
+と出してチャージャーで待ち、1台目がチャージャーへ戻った瞬間に出発する(同じ
+8秒後の投入で最接近 52 mm、forfeit 0)。つまり A4 では**2台同時のタスクは直列化
+される**。それでも上の「30秒空ける・別頂点」は、待ちを短くする意味で有効。
+mutex の調停には RMF の `mutex_group_supervisor` が要り、
+[toio_rmf_bringup#60](https://github.com/atinfinity/toio_rmf_bringup/pull/60) 以降の
+`toio_rmf.launch.py` に含まれている(無いと `Waiting to lock mutex groups` のまま
+動かない。[TROUBLESHOOTING](TROUBLESHOOTING.md) 参照)。
 
 実機ではここで**LEDと効果音**([章9](09_fleet_action.md))が実際に確認できる。
 バッテリも実測値([章7](07_battery_charge.md)、10%刻み)で動く。シミュレー

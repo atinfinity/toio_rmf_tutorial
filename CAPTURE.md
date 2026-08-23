@@ -117,13 +117,13 @@ A4マットで撮るときは `Scale` を上げ気味に、`X`/`Y` をA4の中�
 |---|---|---|
 | `00_setup_gazebo.png` | Gazebo | 起動直後、2台がチャージャー上の全景 |
 | `00_setup_rviz.png` | RViz | 同上のnavグラフ全景(idle) |
-| `03_go_to_place.gif` | Gazebo | `dispatch_go_to_place` で1台を指名し、目的地に着いて停止するまでを録画 |
+| `03_go_to_place.gif` | RViz+Gazebo(合成) | `dispatch_go_to_place -p patrol_B -R toio1` で対角に移動する様子を左RViz/右Gazeboで同時グラブ(下記「合成GIF」参照) |
 | `04_patrol_rviz.png` | RViz | patrol投入後、スケジュール経路帯が出た瞬間 |
 | `04_patrol.gif` | RViz+Gazebo(合成) | patrol走行を左RViz/右Gazeboで並べた合成GIF(下記「合成GIF」参照) |
 | `05_bidding_log.png` | 端末風PNG | `dispatch_patrol` の `-R`有/無 の実出力を並べて描画(`scripts`外の生成物) |
 | `06_traffic_rviz.png` | RViz | 2台に別タスクを投入、経路帯が交錯した瞬間 |
 | `06_traffic.gif` | RViz+Gazebo(合成) | 2台の交差を左RViz/右Gazeboで並べた合成GIF(下記「合成GIF」参照) |
-| `08_delivery.gif` | Gazebo | deliveryを投入し、pickup→dropoffの移動(各地点で約3秒停止)を録画 |
+| `08_delivery.gif` | RViz+Gazebo(合成) | deliveryを投入し、pickup→dropoffの移動と各地点の保持を左RViz/右Gazeboで同時グラブ(下記「合成GIF」参照) |
 | `09_fleet_action.gif` | RViz+Gazebo(合成) | `dispatch_action` を複数投入し、pickup(緑)/dropoff(青)のLED点灯と移動を左RViz/右Gazeboで同時グラブ(下記「合成GIF」参照) |
 | `10_footprint_vicinity.png` | RViz | `ScheduleMarkers` の `participant location 0/1` を表示に切り替え、稼働中の円が出た状態 |
 | `10_dashboard_robots.png` | ブラウザ | rmf-webのRobotsタブ。別途コンテナ起動が要る([docs/DASHBOARD.md](https://github.com/atinfinity/toio_rmf_bringup/blob/main/docs/DASHBOARD.md)) |

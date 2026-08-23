@@ -43,9 +43,10 @@ ros2 run rmf_demos_tasks dispatch_go_to_place -p patrol_B -F toio -R toio1 --use
 指名した(または落札した)1台が、現在地から目的地の waypoint へ向かい、
 着いたら停止する。緑の帯は `rmf_traffic_schedule` が予約した走行経路(スケジュール)。
 
-![go_to_placeで1台が目的地へ移動](images/03_go_to_place.gif)
-*toio1が `charger_1` から目的地へ向かう様子(toio_gazebo)。着いたらそこで停止し、
-patrolのような巡回・周回はしない。*
+![go_to_placeで1台が目的地へ移動(左: RViz2 / 右: Gazebo)](images/03_go_to_place.gif)
+*toio1が `charger_1` から目的地へ向かう様子を2つのビューで並べたもの。左が RViz2
+(RMFスケジュール可視化)、右が toio_gazebo(実際のキューブの動き)。着いたらそこで
+停止し、patrolのような巡回・周回はしない。*
 
 ### 1. タスクの一生をログで追う
 

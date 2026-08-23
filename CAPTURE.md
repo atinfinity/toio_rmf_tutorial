@@ -62,29 +62,34 @@ ffmpeg -y -i /tmp/clip.mp4 -i /tmp/pal.png \
 
 `04_patrol.gif` / `06_traffic.gif` は **RViz と Gazebo を左右に並べた合成GIF**。
 「スケジュール(RViz)」と「実際のキューブの動き(Gazebo)」を同時に見せるため。
-`ffmpeg` が使えない環境向けに、Python だけで撮影・合成する手順も用意した。
+**同一走行から RViz と Gazebo の両ウィンドウを毎フレーム同時にグラブ**するので、
+左右のパネルはフレーム単位で同期する。`ffmpeg` が使えない環境向けに、Python
+だけで撮影・合成する手順も用意した。
 
 ```bash
 pip install --user mss imageio python-xlib   # 画面グラブ / GIF / ウィンドウ操作
 ```
 
-1. **Gazebo ウィンドウを前面化**して連番PNGにグラブ(`python-xlib` の
-   `_NET_ACTIVE_WINDOW` で raise → `mss` で矩形grab → 3Dビュー部分を crop)。
-   ヘッドレス寄りの環境でも、実GPU付きの X(`:1`)なら Gazebo GUI は描画される。
-2. タスク投入 → 数秒(交通調停なら約5秒)待って走り出してから **10fps で
-   180フレーム(=18秒)** グラブ。`traffic` は片道で終わると後半が静止するので、
-   2台を **逆向きに周回**(例: `patrol_B patrol_C` と `patrol_C patrol_B`)させて
-   全編クロスし続ける画にする。
-3. 既存の RViz GIF を左パネル、Gazebo連番を右パネルに置いて横並び合成し、
-   ラベル(`RViz2` / `Gazebo`)を焼き込む(Pillow)。
-4. **GIF軽量化のコツ**: 静止部の微小レンダノイズで色indexがブレるとフレーム間
+前提: RViz をマットスケールで綺麗に写すため、**`rmf_visualization` の small-maps
+パッチ**を適用しておく([docs/SETUP.md](https://github.com/atinfinity/toio_rmf_bringup/blob/main/docs/SETUP.md))。
+未適用だと footprint/vicinity の巨大マーカーがnavグラフを覆う。
+
+1. sim を GUI 付きで起動(`toio_rmf.launch.py` を `rmf_headless` を付けずに実行 →
+   Gazebo GUI と RMF可視化 RViz が両方 `:1` に出る)。実GPU付きの X(`:1`)なら
+   ヘッドレス寄りの環境でも GUI は描画される。
+2. **2つのウィンドウを重ならないように左右へ配置**(`python-xlib` の
+   `_NET_MOVERESIZE_WINDOW` / `_NET_ACTIVE_WINDOW`)。
+3. タスク投入 → 数秒(交通調停なら約5秒)待って走り出してから、**毎フレーム
+   RViz と Gazebo の両矩形を `mss` でグラブ**して連番PNGのペアで保存
+   (10fps × 180フレーム=18秒、それぞれ描画部分を crop)。`traffic` は片道で
+   終わると後半が静止するので、2台を **逆向きに周回**(例: `patrol_B patrol_C` と
+   `patrol_C patrol_B`)させて全編クロスし続ける画にする。
+4. RViz を左、Gazebo を右に置いて横並び合成し、ラベル(`RViz2` / `Gazebo`)を
+   焼き込む(Pillow)。両パネルは同じフレーム番号=同時刻なので同期する。
+5. **GIF軽量化のコツ**: 静止部の微小レンダノイズで色indexがブレるとフレーム間
    圧縮が効かず数MBに膨れる。`ImageOps.posterize(5)` でノイズを丸め、共有パレット
    ・**ディザ無効**・**`disposal=1`**(前フレームに差分だけ上書き)で保存すると、
-   180フレームでも 1〜1.5MB に収まる。
-
-> RViz 側は既存の(small-mapsパッチ適用済みの)綺麗なGIFを再利用し、Gazebo側
-> だけ撮り直して合成している。2つのパネルは別走行のため厳密なフレーム同期は
-> していない(どちらも同じ挙動を映す図として並べている)。
+   180フレームでも 1〜2MB に収まる。
 
 ## RViz のカメラ(フィット/センタリング)
 

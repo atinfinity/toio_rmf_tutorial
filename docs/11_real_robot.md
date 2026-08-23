@@ -1,16 +1,20 @@
-# 章11: 実機へ(sim→real)
+# 章11: 実機へ(sim→real の考え方と準備)
 
-← [前章: 可視化とダッシュボード](10_visualization.md) | [目次](../README.md)
+← [前章: 可視化とダッシュボード](10_visualization.md) | [目次](../README.md) | 次章: [実機で1台を動かす →](12_real_go_to_place.md)
+
+ここから**第2部 実機編**。シミュレーションで学んだフリート処理を、**実機の
+toioキューブ**でもう一度なぞる。この章はその導入で、sim と real で**何が変わり、
+何が変わらないか**を押さえ、実機を起動できる状態まで持っていく。
 
 ## 狙い
 
-- シミュレーションで学んだフリート処理を、**実機のtoioキューブ**へ移す
-- sim と real で**何が変わり、何が変わらないか**を1枚の表で押さえる
-- 実機特有の落とし穴(**起動順序**)と、実機だけの機能(**Dock**)を知る
-- 卒業課題として実機検証チェックリストに挑む
+- sim と real の差分を**1枚の表**で押さえる
+- 実機の準備(Bluetooth・toio.py・A4マット・初期配置)を済ませる
+- 実機特有の落とし穴(**起動順序**と**最初のタスク**)を知ったうえで起動する
+- 以降の章で毎回使う **A4の頂点の読み替え**を手元に置く
 
-ここまでの章はすべてこの章の準備だった。**タスク操作(章3〜9)は
-`--use_sim_time` の有無以外そのまま通る** ── それを実機で確かめる。
+ここまでの章はすべてこの第2部の準備だった。**タスク操作(章3〜9)は
+`--use_sim_time` の有無以外そのまま通る** ── それを章12以降で1つずつ確かめる。
 
 ## 変わらないこと / 変わること
 
@@ -18,19 +22,28 @@
 ロボット層(③)だけ**。RMFコア(①)とフリートアダプタ(②)、つまり入札・
 交通調停・充電・タスクの仕組みは**まったく同じ**。
 
-| | シミュレーション(章0〜10) | 実機(この章) |
+| | シミュレーション(第1部) | 実機(第2部) |
 |---|---|---|
 | RMFコア・入札・交通調停・充電 | ← **同一** → | ← **同一** → |
 | 起動の合図 | `run_sim:=true use_sim_time:=true` | 既定のまま(`run_sim:=false` / `use_sim_time:=false`) |
+| 端末構成 | 端末A(全部)+ 端末B(タスク投入) | 端末1(実機ブリッジ)+ 端末2(RMF+Nav2)+ 端末3(タスク投入) |
+| マット | A3(6頂点・双方向) | **A4**(4頂点・一方通行ループ) |
 | ロボットを動かす実体 | toio_gazebo | toio_ros2 のBLEブリッジ + 実キューブ |
 | 位置報告 | TF(`map`→ベースフレーム)にフォールバック | `/toioN/toio/pose` を購読 |
-| バッテリ | フリート設定の消費モデルで推定 | `/toioN/toio/battery_state`(実測・10%刻みの離散値) |
+| バッテリ | 100%固定(`publish_battery` で疑似放電) | `/toioN/toio/battery_state`(実測・10%刻み) |
 | チャージャー到着 | Nav2の結果だけで完了 | **Dockイベント**でキューブ内蔵走行が精密停止 |
+| 効果音 | ログに出るだけ | 実際に鳴る |
 | タスクCLIの `--use_sim_time` | 付ける | 付けない |
 
 「位置とバッテリは③→②へ別経路で上がる」という[章2](02_architecture.md)の話が、
 ここで効く。実機では TF ではなく toio_ros2 の専用トピック由来になる ──
 **アダプタから上のRMFにとっては、どちらから来ても同じ「ロボットの位置」**。
+
+> [!NOTE]
+> 実機編の各章に載せている画像・動画は、**当面は第1部と同じシミュレーションの
+> もの**を使い回している。画面の見え方(RVizの緑の帯、マゼンタの実位置)は
+> 実機でも同じなので目安にはなるが、右側の Gazebo 画面は実機には無い。
+> 実機撮影のものに差し替える予定。
 
 ## 実機の準備
 
@@ -39,9 +52,9 @@
 
 - Bluetoothアダプタが必要
 - toio.py を venv(`~/toio_venv`)へ導入済みであること
-- **A4マット**を使う(実機検証はA4前提で整備されている)
-- キューブの初期配置(チャージャー頂点への置き方)は
-  [docs/SETUP.md](https://github.com/atinfinity/toio_rmf_bringup/blob/main/docs/SETUP.md)を参照
+- **A4マット**を使う(実機検証はA4前提で整備されている。第2部は全章A4)
+- キューブ2台を**充電済み**にしておく(章14で残量を減らす実験をするが、
+  それ以外の章は残量が十分ある状態で進める)
 
 ![キューブの初期配置(A4マット)](images/initial_placement_a4.svg)
 *toio1 は `charger_1`(左端から約5cm・上下中央)、toio2 は `charger_2`(右端から
@@ -60,7 +73,7 @@
 供給するのは実機ブリッジ側。待ち時間が `initial_transform_timeout` を超えると
 活性化がエラーになり、lifecycle managerがbringup全体を中止する。**自動リトライ
 は無く**、あとからブリッジを起動しても復旧しない ── 全体を落として起動し直す
-しかない。
+しかない(復旧手順は[章16](16_real_troubles.md))。
 
 ```bash
 # 端末1: 実機ブリッジ(venv内。キューブの電源を入れてから)
@@ -71,15 +84,23 @@ ros2 launch toio_ros2 toio_multi_bringup.launch.py cube_ids:=<ID1>,<ID2>
 source /opt/ros/jazzy/setup.bash
 source ~/dev_ws/install/setup.bash
 ros2 launch toio_rmf_bringup toio_rmf.launch.py mat:=a4
+
+# 端末3: タスク投入(第1部の端末Bに相当)
+source /opt/ros/jazzy/setup.bash
+source ~/dev_ws/install/setup.bash
 ```
 
 - 端末2は `run_sim` / `use_sim_time` を**指定しない**(既定が実機運用)
 - RMF運用時は toio_ros2 ノードに `enable_goal_pose_motion:=false` を設定する
   (`/toioN/goal_pose` を無効化。RMFがNav2経由で動かすため)
+- 「ブリッジが位置を出し始めた」は、端末3で
+  `ros2 topic echo /toio1/toio/pose --once` が返ることで確かめられる
 
 TF待ちのタイムアウトは toio_navigation の `nav2_params.yaml` で **300秒**に
-設定済み(Nav2既定の60秒ではBLE接続に足りなかった)。この背景と、逆順に
-してしまった場合の対処は [docs/SETUP.md](https://github.com/atinfinity/toio_rmf_bringup/blob/main/docs/SETUP.md) に詳しい。
+設定済み(Nav2既定の60秒ではBLE接続に足りなかった)。背景は
+[docs/SETUP.md](https://github.com/atinfinity/toio_rmf_bringup/blob/main/docs/SETUP.md) に詳しい。
+
+## 最初のタスクは「25秒待って・ログで確かめて」投げる
 
 > [!WARNING]
 > **`Managed nodes are active` が出てから最初のタスクを投げるまで、約25秒
@@ -89,126 +110,41 @@ TF待ちのタイムアウトは toio_navigation の `nav2_params.yaml` で **30
 > ディスパッチャの `Add Task`(入札時)が出たことを確認する。出ていなければ
 > もう一度投げる。sim では起きにくいが、実機では毎回意識するとよい。
 
-## 実機だけの機能: Dockイベント
+第2部の各章は、この「待って・確かめる」を済ませた状態から始める。
 
-A4のチャージャー頂点には `dock_name` が設定されており、到着の最終区間が
-**Dockイベント**になる。ここではNav2に任せず、**キューブ内蔵のターゲット
-走行**で精密に停止する(toio_fleet_adapter#3)。シミュレーションにはdock
-サーバが無いため、Nav2の結果だけで完了していた。
+## A4の頂点の読み替え(第2部で毎回使う)
 
-A4のnavグラフ(一方通行ループ + チャージャーは支線の先)の形は
-[章6](06_traffic.md)と[docs/TASKS.md](https://github.com/atinfinity/toio_rmf_bringup/blob/main/docs/TASKS.md)で見たとおり。チャージャーを
-ループ上でなく支線の先に置いているのは、通過するだけのロボットが駐機中の
-相手に突っ込まないため。
+第1部のコマンド例はA3(6頂点)前提。**A4は頂点が4つだけ**なので、次の表で
+読み替える。各章のコマンドはすでに読み替え済みで載せるが、第1部の確認課題を
+実機でやり直すときはこの表を見る。
 
-## 実機で試す(sim編のコマンドがそのまま通る)
-
-`--use_sim_time` を**外す**だけで、章3〜9のコマンドがそのまま使える。ただし
-**A4は頂点が4つだけ**なので、A3(6頂点)前提のコマンド例は頂点名を読み替える。
-
-### A4での頂点の読み替え
-
-| A3(sim編・6頂点) | A4(実機・4頂点) |
+| A3(第1部・6頂点) | A4(第2部・4頂点) |
 |---|---|
 | `charger_1` / `charger_2` | `charger_1` / `charger_2`(そのまま) |
 | `patrol_A` / `patrol_B` | `patrol_A` / `patrol_B`(そのまま) |
 | `patrol_D` | **`patrol_B` に読み替え** |
 | `patrol_C` | **A4には無い**(`patrol_A` などで代替) |
 
-```bash
-# patrol(章4 の patrol_A patrol_D → A4 では patrol_A patrol_B)
-ros2 run rmf_demos_tasks dispatch_patrol -p patrol_A patrol_B -n 3
+![A4マットのnavグラフ](images/navgraph_a4.svg)
+*`approach_1 → patrol_A → approach_2 → patrol_B → approach_1` の一方通行ループ。
+チャージャーはループ上でなく支線の先にある。形の意味は[章6](06_traffic.md)の
+実験3と、[章13](13_real_bidding_traffic.md)で改めて扱う。*
 
-# 特定の1台を指名(章3・章5 と同じ)
-ros2 run rmf_demos_tasks dispatch_go_to_place -p charger_2 -F toio -R toio1
-```
+## 実機編の進め方
 
-### A4の入札は「距離」でなく「レーン数」で決まる(章5の読み替え)
+第1部と同じ「狙い / 動かす / 観察する / 理解する / 確認課題」の型で進むが、
+**書くのは sim との差分だけ**。コマンドの意味や概念は第1部の章へリンクするので、
+忘れていたらそちらへ戻る。
 
-A4は**一方通行ループ**なので、入札コストは直線距離ではなく**通るレーンの数**で
-効く。`charger_1 → patrol_A` は 1 レーン、`charger_2 → patrol_A` は 3 レーン
-(ループを回り込む)。したがって指名なしの入札は、
+| # | 章 | 対応する第1部 | 実機で新しく見えるもの |
+|---|---|---|---|
+| 12 | [実機で1台を動かす](12_real_go_to_place.md) | 章3・4 | 位置報告の出どころ、一方通行ループの周回 |
+| 13 | [実機で入札と交通調停](13_real_bidding_traffic.md) | 章5・6 | レーン数で決まる入札、mutex による直列化 |
+| 14 | [実機でバッテリと自動充電](14_real_battery_charge.md) | 章7 | **実測残量で ChargeBattery が発火**、Dock精密停止 |
+| 15 | [実機で搬送・アクション・可視化](15_real_delivery_action_viz.md) | 章8・9・10 | 効果音が鳴る、実機のダッシュボード |
+| 16 | [実機特有のトラブルと復帰](16_real_troubles.md) | ── | BLE切断、マット境界、逆順起動からの復旧 |
+| 17 | [卒業課題とまとめ](17_real_graduation.md) | ── | 実機検証チェックリスト |
 
-- `go_to_place patrol_A` → **toio1** が落札(1レードで安い)
-- `go_to_place patrol_B` → **toio2** が落札
+まず章12で、sim で最初にやった「1台を1回動かす」を実機で繰り返す。
 
-[章5](05_bidding.md)の実験1「先に片方を寄せてから近い方に落札させる」は、A4実機
-では寄せた直後に `finishing_request` でチャージャーへ帰ってしまい成立しない。
-**目的地を `patrol_A` / `patrol_B` と変えて勝者(toio1/toio2)が入れ替わるのを見る**、
-に読み替える。
-
-### 2台同時に投げるときの安全な間隔(章5課題3・章6)
-
-A4は狭く(0.30×0.20m)、2台同時運用は物理限界に近い(頂点付近の角接触)。
-確実な非接触が要る検証はA3、という判断は[章6](06_traffic.md)のとおり。A4実機で
-あえて2台同時に投げるなら:
-
-- **2本目は1本目から30秒以上空ける**
-- **1台目が向かっていない頂点**を2本目に指定する
-
-8秒後に同じ頂点へ投げると接触した(最接近 27 mm、
-[toio_rmf_bringup#56](https://github.com/atinfinity/toio_rmf_bringup/issues/56))。
-
-この接触は [toio_rmf_maps#16](https://github.com/atinfinity/toio_rmf_maps/pull/16) で
-**ループ全体を mutex group `ring`** にして地図側で塞いである。ループ上に居られるのは
-常に1台で、2本目のタスクを受けたロボットは端末2に
-
-```
-[toio/toio2] is waiting to lock mutex group [ring] but that mutex is currently held by [toio/toio1]
-```
-
-と出してチャージャーで待ち、1台目がチャージャーへ戻った瞬間に出発する(同じ
-8秒後の投入で最接近 52 mm、forfeit 0)。つまり A4 では**2台同時のタスクは直列化
-される**。それでも上の「30秒空ける・別頂点」は、待ちを短くする意味で有効。
-mutex の調停には RMF の `mutex_group_supervisor` が要り、
-[toio_rmf_bringup#60](https://github.com/atinfinity/toio_rmf_bringup/pull/60) 以降の
-`toio_rmf.launch.py` に含まれている(無いと `Waiting to lock mutex groups` のまま
-動かない。[TROUBLESHOOTING](TROUBLESHOOTING.md) 参照)。
-
-実機ではここで**LEDと効果音**([章9](09_fleet_action.md))が実際に確認できる。
-バッテリも実測値([章7](07_battery_charge.md)、10%刻み)で動く。シミュレー
-ションで「仕組み」を、実機で「手触り」を得る、という構成の締めくくり。
-
-## 卒業課題 ── 実機検証チェックリスト
-
-[docs/SETUP.md の「検証項目」](https://github.com/atinfinity/toio_rmf_bringup/blob/main/docs/SETUP.md)が、そのまま卒業課題になる。
-sim編の各章と対応づけて挑むと、学んだことの答え合わせになる:
-
-- [ ] patrolタスク完走(1台・3周)← [章4](04_patrol.md)
-- [ ] 2台のフリート登録と位置報告(RVizが実位置と一致)← [章2](02_architecture.md)
-- [ ] 1台ずつの `go_to_place`(順次)← [章3](03_go_to_place.md)
-- [ ] バッテリ離散値(10%刻み)の実測確認 ← [章7](07_battery_charge.md)
-- [ ] 低バッテリ時のChargeBattery発行・チャージャー帰還 ← [章7](07_battery_charge.md)
-- [ ] タスクキャンセル → 再投入 ← [章7](07_battery_charge.md)
-- [ ] BLE切断 → 位置報告停止 → 再接続後の復帰(実機特有)
-- [ ] マット境界付近の挙動(Position ID読取不能領域に入らない、実機特有)
-
-最後の2つはシミュレーションに無い**実機特有の項目**。BLEの切断・再接続や
-マット外での位置ロストは、実機フリート運用で必ず向き合うことになる現実。
-
-## まとめ ── このチュートリアルで登ったもの
-
-```
-章3  1台を1回動かす         ── タスク→Nav2委譲の縦串
-章4  巡回とnavグラフ         ── フリートの地図
-章5  入札                   ── 誰がやるか(タスク割当)      ┐
-章6  交通調停               ── 道をどう分けるか              ├ フリート処理の核心
-章7  バッテリ・充電          ── いつ休むか(自己管理)        ┘
-章8-9 荷役・演出            ── 移動以外のタスク
-章10  可視化                 ── 内部状態を見る
-章11 実機                   ── ③だけ差し替え、①②はそのまま
-```
-
-**入札・交通調停・充電**の3つが、Open-RMFのフリート処理の核。この3層が
-揃うと、運用者は個々のロボットの世話をせずにフリートを回せる ── それを
-toioという手のひらサイズのロボットで、シミュレーションから実機まで通しで
-体験したことになる。
-
-## 次に進むなら
-
-- 別のフリート(toio以外のロボット)を同じRMFコアに繋ぐ ── フリート
-  アダプタ(EasyFullControl)を自分で書く
-- navグラフを自作する ── `toio_rmf_maps` の建物図・navグラフ定義を読む
-- door / lift など、このパッケージが省いたRMF機能(rmf_demos参照)
-
-← [前章: 可視化とダッシュボード](10_visualization.md) | [目次](../README.md)
+← [前章: 可視化とダッシュボード](10_visualization.md) | [目次](../README.md) | 次章: [実機で1台を動かす →](12_real_go_to_place.md)

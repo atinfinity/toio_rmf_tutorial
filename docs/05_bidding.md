@@ -57,7 +57,7 @@ ros2 run rmf_demos_tasks dispatch_patrol -p patrol_D patrol_B -n 1 --use_sim_tim
 > `go_to_place patrol_A` は toio1、`patrol_B` は toio2 が落札する。またこの実験1の
 > 「先に片方を寄せる」手順は、A4では寄せた直後に `finishing_request` で帰ってしまい
 > 成立しない ── **目的地を変えて勝者が入れ替わるのを見る**、に読み替える。詳しくは
-> [章11の「実機で試す」](11_real_robot.md)。
+> 実機編の[章13](13_real_bidding_traffic.md)。
 
 ### 実験2: 指名して入札を飛ばす
 
@@ -102,7 +102,7 @@ ros2 launch toio_rmf_bringup toio_rmf.launch.py mat:=a3 run_sim:=true use_sim_ti
   (バッテリの減ったロボットは不利になりうる)。
 - **指名は入札を上書きする運用の逃げ道**。「この1台を確実に」なら `-F -R`。
   デモや検証で特定の1台を動かしたいときに使う。実機の1台ずつ検証
-  (→[章11](11_real_robot.md))でも重宝する。
+  (→[章12](12_real_go_to_place.md))でも重宝する。
 - 落札後にロボットが実際にどう走るかは、ここまでの章2・3のとおり
   (アダプタ→Nav2)。入札は「**走らせる前の意思決定**」で、走り出したら
   次章の交通調停の世界に入る。
@@ -123,7 +123,7 @@ ros2 launch toio_rmf_bringup toio_rmf.launch.py mat:=a3 run_sim:=true use_sim_ti
 > [!NOTE]
 > **A4実機で2台を同時に走らせるとき**は、2本目を1本目から**30秒以上空け**、
 > **1台目が向かっていない頂点**を指定する(狭いマットでの角接触を避けるため。
-> 詳しくは[章11の「実機で試す」](11_real_robot.md)と[章6](06_traffic.md))。
+> 詳しくは実機編の[章13](13_real_bidding_traffic.md)と[章6](06_traffic.md))。
 
 「誰がやるか」が決まったら、2台が同時に走り出したとき**道をどう分け合うか**
 ── 交通調停へ進む。

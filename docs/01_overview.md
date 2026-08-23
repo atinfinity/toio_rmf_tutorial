@@ -63,7 +63,7 @@ toioを**2台の小さなフリート**に見立て、RMF のフリート処理(
 | **フリートアクション(perform_action)** | 標準タスクにない独自動作。toioではLED・効果音の演出 | [章9](09_fleet_action.md) |
 | **finishing_request** | タスク完了後の片付けポリシー(toioは `charge`=チャージャーへ帰す) | [章4](04_patrol.md) / [章7](07_battery_charge.md) |
 | **ChargeBattery** | 残量が閾値を下回る見込みのときRMFが**自動で計画**する充電タスク | [章7](07_battery_charge.md) |
-| **Dock** | チャージャー到着の最終区間で使う精密停止(実機のキューブ内蔵走行)。A4のみ | [章11](11_real_robot.md) |
+| **Dock** | チャージャー到着の最終区間で使う精密停止(実機のキューブ内蔵走行)。A4のみ | [章14](14_real_battery_charge.md) |
 | **door / lift supervisor** | ドア・エレベータの調停役。toioの遊び場には不要なので本パッケージでは省略 | ── |
 
 ## 全体像(次章への橋渡し)

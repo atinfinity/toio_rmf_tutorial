@@ -68,6 +68,11 @@ ros2 run rmf_demos_tasks dispatch_action -s patrol_D -a delivery_dropoff --use_s
 `toio_fleet_adapter/config/toio_fleet_config_<mat>.yaml` の `toio.actions`
 セクションで変えられる。編集後は端末Aを起動し直すと反映される。
 
+> `toio.actions` は `finishing_request`([章7](07_battery_charge.md))と同じく
+> フリートアダプタ(RMF側)の設定。**実機では端末2(RMFコア+アダプタ)を
+> 再起動するだけで反映され、端末1の実機ブリッジは触らなくてよい**
+> (キューブは繋ぎっぱなしでよい)。
+
 **やってみる**: `delivery_pickup` の保持時間を長くする、LEDの色を変える、
 などを1つ試して、`dispatch_action` で挙動が変わることを確認する。
 章7で `recharge_threshold` をいじったときと同じく、

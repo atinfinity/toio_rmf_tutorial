@@ -84,6 +84,13 @@ ros2 topic echo /fleet_states --once
 [issue #35](https://github.com/atinfinity/toio_rmf_bringup/issues/35)にある。sim で確認
 できる充電まわりの挙動は、次の **finishing_request による完了後の帰還**である。
 
+> [!NOTE]
+> **実機では `battery_percent` が実際に減る**(sim の「100%固定」の裏返し)。
+> キューブが10%刻みで通知するため離散的に下がり、実測では**25分のタスク走行で
+> 90% → 70%** ほど。ChargeBattery が発火する閾値は**20%以下**
+> ([toio_rmf_bringup#50](https://github.com/atinfinity/toio_rmf_bringup/issues/50))。
+> つまり上の「実行中 → 充電帰還」の遷移は、実機で残量を20%まで落として初めて見える。
+
 ### 3. 完了後の自動帰還を見る(finishing_request)
 
 短いpatrolでも、**完了後にチャージャーへ帰る**のは `finishing_request: "charge"`
@@ -132,6 +139,9 @@ ros2 run rmf_demos_tasks cancel_task -id <task_id>
 2. patrol 完了後、ロボットが `finishing_request: "charge"` で自機のチャージャーへ
    帰るのを確認する(**これは sim でも動く**充電まわりの挙動)。`finishing_request`
    を `nothing` に変えて起動し直すと帰らなくなることも試す(確認後は戻す)。
+   > `finishing_request` はフリートアダプタ(RMF側)の設定。**実機では端末2
+   > (RMFコア+アダプタ)を再起動するだけで反映され、端末1の実機ブリッジは
+   > 触らなくてよい**(キューブは繋ぎっぱなしでよい)。
 3. 実行中タスクを `cancel_task` で取り消し、ロボットがチャージャーへ戻る
    ことを確認する。キャンセルと finishing_request の関係を説明できるか。
 

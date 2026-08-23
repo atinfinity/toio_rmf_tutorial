@@ -81,6 +81,14 @@ TF待ちのタイムアウトは toio_navigation の `nav2_params.yaml` で **30
 設定済み(Nav2既定の60秒ではBLE接続に足りなかった)。この背景と、逆順に
 してしまった場合の対処は [docs/SETUP.md](https://github.com/atinfinity/toio_rmf_bringup/blob/main/docs/SETUP.md) に詳しい。
 
+> [!WARNING]
+> **`Managed nodes are active` が出てから最初のタスクを投げるまで、約25秒
+> 待つ。** 活性化直後に投げた**最初のCLI要求は消えることがある**
+> ([toio_rmf_bringup#55](https://github.com/atinfinity/toio_rmf_bringup/issues/55))。
+> 投げたら、フリートアダプタのログに `Direct request … queued`(指名時)か
+> ディスパッチャの `Add Task`(入札時)が出たことを確認する。出ていなければ
+> もう一度投げる。sim では起きにくいが、実機では毎回意識するとよい。
+
 ## 実機だけの機能: Dockイベント
 
 A4のチャージャー頂点には `dock_name` が設定されており、到着の最終区間が
@@ -95,20 +103,51 @@ A4のnavグラフ(一方通行ループ + チャージャーは支線の先)の�
 
 ## 実機で試す(sim編のコマンドがそのまま通る)
 
-`--use_sim_time` を**外す**だけで、章3〜9のコマンドがそのまま使える。A4の
-頂点名(`patrol_A` / `patrol_B` / `charger_1` / `charger_2`)を使う:
+`--use_sim_time` を**外す**だけで、章3〜9のコマンドがそのまま使える。ただし
+**A4は頂点が4つだけ**なので、A3(6頂点)前提のコマンド例は頂点名を読み替える。
+
+### A4での頂点の読み替え
+
+| A3(sim編・6頂点) | A4(実機・4頂点) |
+|---|---|
+| `charger_1` / `charger_2` | `charger_1` / `charger_2`(そのまま) |
+| `patrol_A` / `patrol_B` | `patrol_A` / `patrol_B`(そのまま) |
+| `patrol_D` | **`patrol_B` に読み替え** |
+| `patrol_C` | **A4には無い**(`patrol_A` などで代替) |
 
 ```bash
-# patrol(章4 と同じ。--use_sim_time が無いだけ)
+# patrol(章4 の patrol_A patrol_D → A4 では patrol_A patrol_B)
 ros2 run rmf_demos_tasks dispatch_patrol -p patrol_A patrol_B -n 3
 
 # 特定の1台を指名(章3・章5 と同じ)
 ros2 run rmf_demos_tasks dispatch_go_to_place -p charger_2 -F toio -R toio1
 ```
 
-> **実機はまず1台ずつ**。A4は狭く2台同時運用は物理限界に近い(頂点付近の
-> 角接触)。確実な非接触が要る検証はA3、という判断は[章6](06_traffic.md)で
-> 見たとおり。2台同時は接触リスクを認識のうえで。
+### A4の入札は「距離」でなく「レーン数」で決まる(章5の読み替え)
+
+A4は**一方通行ループ**なので、入札コストは直線距離ではなく**通るレーンの数**で
+効く。`charger_1 → patrol_A` は 1 レーン、`charger_2 → patrol_A` は 3 レーン
+(ループを回り込む)。したがって指名なしの入札は、
+
+- `go_to_place patrol_A` → **toio1** が落札(1レードで安い)
+- `go_to_place patrol_B` → **toio2** が落札
+
+[章5](05_bidding.md)の実験1「先に片方を寄せてから近い方に落札させる」は、A4実機
+では寄せた直後に `finishing_request` でチャージャーへ帰ってしまい成立しない。
+**目的地を `patrol_A` / `patrol_B` と変えて勝者(toio1/toio2)が入れ替わるのを見る**、
+に読み替える。
+
+### 2台同時に投げるときの安全な間隔(章5課題3・章6)
+
+A4は狭く(0.30×0.20m)、2台同時運用は物理限界に近い(頂点付近の角接触)。
+確実な非接触が要る検証はA3、という判断は[章6](06_traffic.md)のとおり。A4実機で
+あえて2台同時に投げるなら:
+
+- **2本目は1本目から30秒以上空ける**
+- **1台目が向かっていない頂点**を2本目に指定する
+
+8秒後に同じ頂点へ投げると接触する(最接近 27 mm、
+[toio_rmf_bringup#56](https://github.com/atinfinity/toio_rmf_bringup/issues/56))。
 
 実機ではここで**LEDと効果音**([章9](09_fleet_action.md))が実際に確認できる。
 バッテリも実測値([章7](07_battery_charge.md)、10%刻み)で動く。シミュレー

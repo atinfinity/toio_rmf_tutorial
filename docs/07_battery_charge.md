@@ -1,6 +1,6 @@
 # 章7: バッテリと自動充電(ChargeBattery)
 
-← [前章: 交通調停](06_traffic.md) | [目次](../README.md) | 次章: [搬送とワークセル →](08_delivery.md)
+← [前章: 交通調停](06_traffic.md) | [目次](index.md) | 次章: [搬送とワークセル →](08_delivery.md)
 
 ## 狙い
 
@@ -173,4 +173,4 @@ ros2 run rmf_demos_tasks cancel_task -id <task_id>
 自己管理まで見たら、次は「移動」以外のタスク ── **荷役**(delivery)へ。
 ロボットだけでなく**ワークセル**という別の登場人物が出てくる。
 
-← [前章: 交通調停](06_traffic.md) | [目次](../README.md) | 次章: [搬送とワークセル →](08_delivery.md)
+← [前章: 交通調停](06_traffic.md) | [目次](index.md) | 次章: [搬送とワークセル →](08_delivery.md)

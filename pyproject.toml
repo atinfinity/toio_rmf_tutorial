@@ -1,0 +1,10 @@
+[project]
+name = "toio-rmf-tutorial"
+version = "1.0.0"
+description = "Tutorial for Open-RMF fleet processing with toio"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "mkdocs-material>=9.7.6",
+    "mkdocs-callouts>=1.15.0",
+]

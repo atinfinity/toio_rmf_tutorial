@@ -1,6 +1,6 @@
 # 章16: 実機特有のトラブルと復帰
 
-← [前章: 実機で搬送・アクション・可視化](15_real_delivery_action_viz.md) | [目次](../README.md) | 次章: [卒業課題とまとめ →](17_real_graduation.md)
+← [前章: 実機で搬送・アクション・可視化](15_real_delivery_action_viz.md) | [目次](index.md) | 次章: [卒業課題とまとめ →](17_real_graduation.md)
 
 対応する第1部: なし(実機だけの内容)。sim のトラブルは [TROUBLESHOOTING.md](TROUBLESHOOTING.md)。
 
@@ -115,4 +115,4 @@ Nav2 が現在位置を取り直して走行を続ける。ずれが大きいと
 壊し方と直し方まで分かれば、実機フリート運用の入口に立ったことになる。
 最後に卒業課題で答え合わせをする。
 
-← [前章: 実機で搬送・アクション・可視化](15_real_delivery_action_viz.md) | [目次](../README.md) | 次章: [卒業課題とまとめ →](17_real_graduation.md)
+← [前章: 実機で搬送・アクション・可視化](15_real_delivery_action_viz.md) | [目次](index.md) | 次章: [卒業課題とまとめ →](17_real_graduation.md)

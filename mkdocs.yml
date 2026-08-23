@@ -1,0 +1,47 @@
+site_name: toioで学ぶ Open-RMF フリート処理
+site_url: https://atinfinity.github.io/toio_rmf_tutorial/
+repo_url: https://github.com/atinfinity/toio_rmf_tutorial
+theme:
+  name: material
+  language: ja
+  features:
+    - navigation.top
+    - content.code.copy
+nav:
+  - Home: index.md
+  - 第1部 シミュレーション編:
+    - 章0 環境構築とスモークテスト: 00_setup.md
+    - 章1 Open-RMFとは(概要と用語): 01_overview.md
+    - 章2 RMFの全体像を掴む: 02_architecture.md
+    - 章3 1台を動かす(go_to_place): 03_go_to_place.md
+    - 章4 巡回と帰還(patrol): 04_patrol.md
+    - 章5 2台と入札(bidding): 05_bidding.md
+    - 章6 交通調停(traffic): 06_traffic.md
+    - 章7 バッテリと自動充電: 07_battery_charge.md
+    - 章8 搬送とワークセル(delivery): 08_delivery.md
+    - 章9 フリートアクション: 09_fleet_action.md
+    - 章10 可視化とダッシュボード: 10_visualization.md
+  - 第2部 実機編:
+    - 章11 実機へ(sim→real の考え方と準備): 11_real_robot.md
+    - 章12 実機で1台を動かす: 12_real_go_to_place.md
+    - 章13 実機で入札と交通調停: 13_real_bidding_traffic.md
+    - 章14 実機でバッテリと自動充電: 14_real_battery_charge.md
+    - 章15 実機で搬送・アクション・可視化: 15_real_delivery_action_viz.md
+    - 章16 実機特有のトラブルと復帰: 16_real_troubles.md
+    - 章17 卒業課題とまとめ: 17_real_graduation.md
+  - 付録:
+    - トラブルシューティング: TROUBLESHOOTING.md
+    - メディア撮影手順(CAPTURE): CAPTURE.md
+plugins:
+  - search
+  - callouts
+markdown_extensions:
+  - admonition
+  - attr_list
+  - md_in_html
+  - pymdownx.details
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format

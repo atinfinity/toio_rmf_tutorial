@@ -1,6 +1,6 @@
 # 章5: 2台と入札(bidding)
 
-← [前章: 巡回と帰還](04_patrol.md) | [目次](../README.md) | 次章: [交通調停 →](06_traffic.md)
+← [前章: 巡回と帰還](04_patrol.md) | [目次](index.md) | 次章: [交通調停 →](06_traffic.md)
 
 ## 狙い
 
@@ -128,4 +128,4 @@ ros2 launch toio_rmf_bringup toio_rmf.launch.py mat:=a3 run_sim:=true use_sim_ti
 「誰がやるか」が決まったら、2台が同時に走り出したとき**道をどう分け合うか**
 ── 交通調停へ進む。
 
-← [前章: 巡回と帰還](04_patrol.md) | [目次](../README.md) | 次章: [交通調停 →](06_traffic.md)
+← [前章: 巡回と帰還](04_patrol.md) | [目次](index.md) | 次章: [交通調停 →](06_traffic.md)

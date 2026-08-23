@@ -1,6 +1,6 @@
 # 章3: 1台を動かす(go_to_place)
 
-← [前章: RMFの全体像](02_architecture.md) | [目次](../README.md) | 次章: [巡回と帰還 →](04_patrol.md)
+← [前章: RMFの全体像](02_architecture.md) | [目次](index.md) | 次章: [巡回と帰還 →](04_patrol.md)
 
 ## 狙い
 
@@ -112,4 +112,4 @@ ros2 run tf2_ros tf2_echo map toio1/base_link
 
 「1台・1回」が追えたら、次は「巡回」でnavグラフそのものを理解する。
 
-← [前章: RMFの全体像](02_architecture.md) | [目次](../README.md) | 次章: [巡回と帰還 →](04_patrol.md)
+← [前章: RMFの全体像](02_architecture.md) | [目次](index.md) | 次章: [巡回と帰還 →](04_patrol.md)

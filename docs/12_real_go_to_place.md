@@ -1,6 +1,6 @@
 # 章12: 実機で1台を動かす(go_to_place / patrol)
 
-← [前章: 実機へ](11_real_robot.md) | [目次](../README.md) | 次章: [実機で入札と交通調停 →](13_real_bidding_traffic.md)
+← [前章: 実機へ](11_real_robot.md) | [目次](index.md) | 次章: [実機で入札と交通調停 →](13_real_bidding_traffic.md)
 
 対応する第1部: [章3 1台を動かす](03_go_to_place.md) / [章4 巡回と帰還](04_patrol.md)
 
@@ -101,4 +101,4 @@ ros2 topic echo /toio1/toio/pose
 
 1台が実機で動いたら、次は2台。A4の狭さが入札と交通調停にどう効くかを見る。
 
-← [前章: 実機へ](11_real_robot.md) | [目次](../README.md) | 次章: [実機で入札と交通調停 →](13_real_bidding_traffic.md)
+← [前章: 実機へ](11_real_robot.md) | [目次](index.md) | 次章: [実機で入札と交通調停 →](13_real_bidding_traffic.md)

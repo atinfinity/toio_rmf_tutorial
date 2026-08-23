@@ -1,6 +1,6 @@
 # 章6: 交通調停(traffic)
 
-← [前章: 2台と入札](05_bidding.md) | [目次](../README.md) | 次章: [バッテリと自動充電 →](07_battery_charge.md)
+← [前章: 2台と入札](05_bidding.md) | [目次](index.md) | 次章: [バッテリと自動充電 →](07_battery_charge.md)
 
 ## 狙い
 
@@ -134,4 +134,4 @@ ros2 run rmf_demos_tasks dispatch_patrol -p patrol_A patrol_B -n 2 --use_sim_tim
 道の分け合いまで見たら、次は**バッテリが尽きそうなとき勝手に充電へ帰る**、
 フリートの自律的な自己管理を見る。
 
-← [前章: 2台と入札](05_bidding.md) | [目次](../README.md) | 次章: [バッテリと自動充電 →](07_battery_charge.md)
+← [前章: 2台と入札](05_bidding.md) | [目次](index.md) | 次章: [バッテリと自動充電 →](07_battery_charge.md)

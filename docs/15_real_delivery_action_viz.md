@@ -1,6 +1,6 @@
 # 章15: 実機で搬送・アクション・可視化(delivery / perform_action / dashboard)
 
-← [前章: 実機でバッテリと自動充電](14_real_battery_charge.md) | [目次](../README.md) | 次章: [実機特有のトラブルと復帰 →](16_real_troubles.md)
+← [前章: 実機でバッテリと自動充電](14_real_battery_charge.md) | [目次](index.md) | 次章: [実機特有のトラブルと復帰 →](16_real_troubles.md)
 
 対応する第1部: [章8 搬送とワークセル](08_delivery.md) / [章9 フリートアクション](09_fleet_action.md) / [章10 可視化とダッシュボード](10_visualization.md)
 
@@ -108,4 +108,4 @@ ros2 launch toio_rmf_bringup toio_rmf.launch.py mat:=a4 \
 
 機能は一通り実機で通った。残るのは、sim には無かった**実機だけのトラブル**。
 
-← [前章: 実機でバッテリと自動充電](14_real_battery_charge.md) | [目次](../README.md) | 次章: [実機特有のトラブルと復帰 →](16_real_troubles.md)
+← [前章: 実機でバッテリと自動充電](14_real_battery_charge.md) | [目次](index.md) | 次章: [実機特有のトラブルと復帰 →](16_real_troubles.md)

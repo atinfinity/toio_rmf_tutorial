@@ -124,6 +124,7 @@ A4マットで撮るときは `Scale` を上げ気味に、`X`/`Y` をA4の中�
 | `06_traffic_rviz.png` | RViz | 2台に別タスクを投入、経路帯が交錯した瞬間 |
 | `06_traffic.gif` | RViz+Gazebo(合成) | 2台の交差を左RViz/右Gazeboで並べた合成GIF(下記「合成GIF」参照) |
 | `08_delivery.gif` | Gazebo | deliveryを投入し、pickup→dropoffの移動(各地点で約3秒停止)を録画 |
+| `09_fleet_action.gif` | RViz+Gazebo(合成) | `dispatch_action` を複数投入し、pickup(緑)/dropoff(青)のLED点灯と移動を左RViz/右Gazeboで同時グラブ(下記「合成GIF」参照) |
 | `10_footprint_vicinity.png` | RViz | `ScheduleMarkers` の `participant location 0/1` を表示に切り替え、稼働中の円が出た状態 |
 | `10_dashboard_robots.png` | ブラウザ | rmf-webのRobotsタブ。別途コンテナ起動が要る([docs/DASHBOARD.md](https://github.com/atinfinity/toio_rmf_bringup/blob/main/docs/DASHBOARD.md)) |
 

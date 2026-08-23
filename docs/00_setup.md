@@ -62,7 +62,7 @@ ros2 run rmf_demos_tasks dispatch_patrol -p patrol_A patrol_D -n 2 --use_sim_tim
 RVizには同じマットのnavグラフ(頂点とレーン)と2台の位置が描かれる。
 
 ![toio_gazebo: A3マット上の2台のキューブ](images/00_setup_gazebo.png)
-*Gazebo ── A3マット(グレー)の上に `toio1` / `toio2` の2台。緑の線は各ロボットのレーザースキャン。*
+*Gazebo ── A3マット(グレー)の上に `toio1` / `toio2` の2台。緑の線は Gazebo が光源(各ロボットのLEDランプなど)の位置を示す表示で、センサーではない(toioにレーザースキャンはない)。*
 
 ![RViz: A3マットのnavグラフと2台](images/00_setup_rviz.png)
 *RViz(真上視点)── 6頂点(`charger_1/2`・`patrol_A/B/C/D`)と全レーンの格子が描かれ、2台のロボット(マゼンタの球)がそれぞれのチャージャー上にいる。*

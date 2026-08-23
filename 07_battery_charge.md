@@ -91,6 +91,22 @@ ros2 topic echo /fleet_states --once
 > ([toio_rmf_bringup#50](https://github.com/atinfinity/toio_rmf_bringup/issues/50))。
 > つまり上の「実行中 → 充電帰還」の遷移は、実機で残量を20%まで落として初めて見える。
 
+> [!TIP]
+> **sim でも ChargeBattery を見たいとき**は、toio_gazebo の**オプトインの
+> sim バッテリ**を有効にする(`publish_battery:=true`)。走行で SoC が減り、
+> 自機チャージャーで充電されるので、sim でも「残量低下 → ChargeBattery →
+> チャージャーへ帰還 → 充電 → 復帰」を通しで観察できる。既定は OFF なので、
+> 付けない限り本文どおり 100% 固定のまま。デモを短時間で見たいときは
+> `battery_discharge_rate` を上げる:
+>
+> ```bash
+> ros2 launch toio_rmf_bringup toio_rmf.launch.py mat:=a3 run_sim:=true \
+>   use_sim_time:=true publish_battery:=true battery_discharge_rate:=0.02
+> ```
+>
+> 仕組みと引数は [toio_gazebo の「Battery and Open-RMF ChargeBattery」](https://github.com/atinfinity/toio_gazebo/blob/main/docs/topics.md#battery-and-open-rmf-chargebattery)。
+> なお実機の残量検証は引き続き実機で行う(上の[!NOTE])。
+
 ### 3. 完了後の自動帰還を見る(finishing_request)
 
 短いpatrolでも、**完了後にチャージャーへ帰る**のは `finishing_request: "charge"`

@@ -1,6 +1,6 @@
 # 章0: 環境構築とスモークテスト
 
-← [目次](README.md) | 次章: [Open-RMFとは(概要と用語) →](01_overview.md)
+← [目次](../README.md) | 次章: [Open-RMFとは(概要と用語) →](01_overview.md)
 
 ## 狙い
 
@@ -107,4 +107,4 @@ RVizには同じマットのnavグラフ(頂点とレーン)と2台の位置が�
 
 うまく1周できたら、次章でこの環境の「地図」を描く。
 
-← [目次](README.md) | 次章: [Open-RMFとは(概要と用語) →](01_overview.md)
+← [目次](../README.md) | 次章: [Open-RMFとは(概要と用語) →](01_overview.md)

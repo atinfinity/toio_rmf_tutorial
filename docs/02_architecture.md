@@ -1,6 +1,6 @@
 # 章2: RMFの全体像を掴む
 
-← [前章: Open-RMFとは](01_overview.md) | [目次](README.md) | 次章: [1台を動かす →](03_go_to_place.md)
+← [前章: Open-RMFとは](01_overview.md) | [目次](../README.md) | 次章: [1台を動かす →](03_go_to_place.md)
 
 ## 狙い
 
@@ -109,4 +109,4 @@ ros2 topic echo /fleet_states --once
 
 三層の地図が描けたら、いよいよ一番下の「1台を1回動かす」から積み上げる。
 
-← [前章: Open-RMFとは](01_overview.md) | [目次](README.md) | 次章: [1台を動かす →](03_go_to_place.md)
+← [前章: Open-RMFとは](01_overview.md) | [目次](../README.md) | 次章: [1台を動かす →](03_go_to_place.md)

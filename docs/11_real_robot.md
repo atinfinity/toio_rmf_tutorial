@@ -1,6 +1,6 @@
 # 章11: 実機へ(sim→real)
 
-← [前章: 可視化とダッシュボード](10_visualization.md) | [目次](README.md)
+← [前章: 可視化とダッシュボード](10_visualization.md) | [目次](../README.md)
 
 ## 狙い
 
@@ -211,4 +211,4 @@ toioという手のひらサイズのロボットで、シミュレーション�
 - navグラフを自作する ── `toio_rmf_maps` の建物図・navグラフ定義を読む
 - door / lift など、このパッケージが省いたRMF機能(rmf_demos参照)
 
-← [前章: 可視化とダッシュボード](10_visualization.md) | [目次](README.md)
+← [前章: 可視化とダッシュボード](10_visualization.md) | [目次](../README.md)

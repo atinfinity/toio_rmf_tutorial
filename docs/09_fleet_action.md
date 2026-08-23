@@ -58,7 +58,7 @@ ros2 run rmf_demos_tasks dispatch_action -s patrol_D -a delivery_dropoff --use_s
   フリートアダプタの LED 指令を反映するため、上のGIFのとおり**シミュレーションでも
   色は見える**。効果音は `toio_sound` ノードが効果音ID付きで指令を出す(ログに
   `playing sound effect ...` が出る)が、**sim では鳴らない**。実機ではこの効果音が
-  実際に鳴る ── この差が章11で実機に移る動機のひとつ。
+  実際に鳴る ── この差が第2部で実機に移る動機のひとつ([章15](15_real_delivery_action_viz.md))。
 - `rmf_task_dispatcher` のログで、`perform_action` タスクがアクション名付きで
   実行される様子が読める
 

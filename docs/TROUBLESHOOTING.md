@@ -143,7 +143,7 @@ ros2 launch toio_rmf_bringup toio_rmf.launch.py mat:=a3 run_sim:=true use_sim_ti
   ディスパッチャの `Add Task`(入札時)が出たことを確認する。出ていなければ
   もう一度投げる(2回目は通る)。
 
-sim では起きにくいが、実機の毎回の立ち上げで意識しておくとよい([章11](11_real_robot.md))。
+sim では起きにくいが、実機の毎回の立ち上げで意識しておくとよい([章11](11_real_robot.md)、[章16](16_real_troubles.md))。
 
 ## バッテリが減らない / ChargeBattery が発火しない
 

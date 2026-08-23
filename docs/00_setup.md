@@ -26,7 +26,7 @@ bash /tmp/toio_rmf_bringup/scripts/setup_environment.sh   # シミュレーシ�
 パッケージのclone、rosdep、colcon buildまでを行う。
 
 > このチュートリアルはシミュレーションだけで章10まで進むので、`--with-demos` /
-> `--with-toio-py` は不要。実機の準備は[章11](11_real_robot.md)で行う。
+> `--with-toio-py` は不要。実機の準備は第2部の[章11](11_real_robot.md)で行う。
 
 ### 2. RVizの可視化パッチ(推奨)
 

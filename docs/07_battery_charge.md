@@ -63,7 +63,7 @@ ros2 topic echo /fleet_states --once
 > それが無いためだ。フリート設定の `account_for_battery_drain` はタスクの
 > **見積り**(入札コスト)には効くが、**報告される残量そのものは動かない**。
 > 実機ではこの値がキューブの実測(10%刻みの離散値)由来になる
-> (sim/realの差は[章11](11_real_robot.md))。
+> (実機での確認は[章14](14_real_battery_charge.md))。
 
 ### 2. ChargeBattery はシミュレーションでは発火しない
 
@@ -80,7 +80,7 @@ ros2 topic echo /fleet_states --once
 > と出る。
 
 したがって **ChargeBattery の自動発火は実機で検証する**(キューブの `battery_state`
-が実際に放電する)。手順は[章11](11_real_robot.md)と
+が実際に放電する)。手順は実機編の[章14](14_real_battery_charge.md)と
 [issue #35](https://github.com/atinfinity/toio_rmf_bringup/issues/35)にある。sim で確認
 できる充電まわりの挙動は、次の **finishing_request による完了後の帰還**である。
 

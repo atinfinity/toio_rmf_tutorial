@@ -48,11 +48,17 @@ ros2 run rmf_demos_tasks dispatch_action -s patrol_D -a delivery_dropoff --use_s
 
 ## 観察する
 
+![フリートアクションのアニメーション(左: RViz2 / 右: Gazebo)](images/09_fleet_action.gif)
+*指定頂点へ移動して `perform_action` を実行する様子。右の Gazebo で、pickup 時に
+キューブの LED が**緑**、dropoff 時に**青**へ色づくのが見える(その間 3 秒保持)。
+左の RViz2 では各ロボットが対象 waypoint 上で停止する。*
+
 - ロボットが指定頂点へ移動し、そこで**3秒保持**する
-- (実機なら)LEDが色づき(pickup=緑 / dropoff=青)、効果音が鳴る。
-  シミュレーションでは音・LEDは出ないが、**タスクとしての保持時間と
-  アクション実行**は同じように起きる。この「見た目」の差こそが章11で実機に
-  移る動機になる。
+- **LEDが色づく**(pickup=緑 / dropoff=青)。toio_gazebo の `ToioLedSystem` が
+  フリートアダプタの LED 指令を反映するため、上のGIFのとおり**シミュレーションでも
+  色は見える**。効果音は `toio_sound` ノードが効果音ID付きで指令を出す(ログに
+  `playing sound effect ...` が出る)が、**sim では鳴らない**。実機ではこの効果音が
+  実際に鳴る ── この差が章11で実機に移る動機のひとつ。
 - `rmf_task_dispatcher` のログで、`perform_action` タスクがアクション名付きで
   実行される様子が読める
 

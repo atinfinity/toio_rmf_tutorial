@@ -123,15 +123,17 @@ A4マットで撮るときは `Scale` を上げ気味に、`X`/`Y` をA4の中�
 | `05_bidding_log.png` | 端末風PNG | `dispatch_patrol` の `-R`有/無 の実出力を並べて描画(`scripts`外の生成物) |
 | `06_traffic_rviz.png` | RViz | 2台に別タスクを投入、経路帯が交錯した瞬間 |
 | `06_traffic.gif` | RViz+Gazebo(合成) | 2台の交差を左RViz/右Gazeboで並べた合成GIF(下記「合成GIF」参照) |
+| `07_battery_charge.gif` | RViz+Gazebo(合成) | `publish_battery:=true`(放電を速めた例)で patrol → 残量低下 → チャージャーで充電 → 復帰。左RViz/右Gazebo を同時グラブし、左下に toio1 の残量バー(`/fleet_states` の `battery_percent`)を焼き込む(下記「合成GIF」参照) |
 | `08_delivery.gif` | RViz+Gazebo(合成) | deliveryを投入し、pickup→dropoffの移動と各地点の保持を左RViz/右Gazeboで同時グラブ(下記「合成GIF」参照) |
 | `09_fleet_action.gif` | RViz+Gazebo(合成) | `dispatch_action` を複数投入し、pickup(緑)/dropoff(青)のLED点灯と移動を左RViz/右Gazeboで同時グラブ(下記「合成GIF」参照) |
 | `10_footprint_vicinity.png` | RViz | `ScheduleMarkers` の `participant location 0/1` を表示に切り替え、稼働中の円が出た状態 |
 | `10_dashboard_robots.png` | ブラウザ | rmf-webのRobotsタブ。別途コンテナ起動が要る([docs/DASHBOARD.md](https://github.com/atinfinity/toio_rmf_bringup/blob/main/docs/DASHBOARD.md)) |
 
-### まだ用意していない(必要なら追加)
-
-- `07_battery.*` … シミュレーションでは残量が100%に固定され、ChargeBatteryも
-  発火しない([章7](07_battery_charge.md)で実測確認)。撮るには実機が必要
+> `07_battery_charge.gif` は残量バーを焼き込むため、フレームごとに
+> `/fleet_states` の `battery_percent` を記録しながら両ウィンドウをグラブし、
+> 合成時にバー(緑/黄/赤 + `CHARGING` 表示)を描く。放電が速すぎると 0% まで
+> 落ちてから充電に入るので、`battery_discharge_rate` は 0% に達する前に
+> 帰還・充電が見える程度(例 0.03)に抑える。
 
 ## 図版(SVG)の原本
 

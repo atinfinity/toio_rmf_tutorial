@@ -107,6 +107,12 @@ ros2 topic echo /fleet_states --once
 > 仕組みと引数は [toio_gazebo の「Battery and Open-RMF ChargeBattery」](https://github.com/atinfinity/toio_gazebo/blob/main/docs/topics.md#battery-and-open-rmf-chargebattery)。
 > なお実機の残量検証は引き続き実機で行う(上の[!NOTE])。
 
+![sim ChargeBattery(左: RViz2 / 右: Gazebo、左下に toio1 の残量)](images/07_battery_charge.gif)
+*`publish_battery:=true`(放電を速めた例)。patrol 中に `battery_percent` が減り
+(左下のバー)、低下するとチャージャーへ帰って **CHARGING** で 100% まで回復し、
+そのあとタスクに戻る ── sim で再現した充電まわりの一連。既定 OFF なので、
+付けない限りこの挙動は起きず残量は 100% 固定のまま。*
+
 ### 3. 完了後の自動帰還を見る(finishing_request)
 
 短いpatrolでも、**完了後にチャージャーへ帰る**のは `finishing_request: "charge"`

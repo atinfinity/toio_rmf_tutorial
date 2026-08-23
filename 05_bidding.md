@@ -51,6 +51,14 @@ ros2 run rmf_demos_tasks dispatch_patrol -p patrol_D patrol_B -n 1 --use_sim_tim
 **観察**: 近くにいるtoio1が落札するはず。端末Aの `rmf_task_dispatcher` ログで、
 2台ぶんのBidResponseが並び、コストの低い方(toio1)が選ばれる様子を読む。
 
+> [!NOTE]
+> **A4実機では入札は「距離」でなく「レーン数」で決まる。** 一方通行ループなので
+> `charger_1 → patrol_A` は 1 レーン、`charger_2 → patrol_A` は 3 レーン。指名なしの
+> `go_to_place patrol_A` は toio1、`patrol_B` は toio2 が落札する。またこの実験1の
+> 「先に片方を寄せる」手順は、A4では寄せた直後に `finishing_request` で帰ってしまい
+> 成立しない ── **目的地を変えて勝者が入れ替わるのを見る**、に読み替える。詳しくは
+> [章11の「実機で試す」](11_real_robot.md)。
+
 ### 実験2: 指名して入札を飛ばす
 
 同じ状況で、今度はわざと**遠い方を指名**する:
@@ -111,6 +119,11 @@ ros2 launch toio_rmf_bringup toio_rmf.launch.py mat:=a3 run_sim:=true use_sim_ti
 3. 片方(例:toio1)に長いpatrol(`-n 5`)を先に投げて**塞いでおき**、
    その最中に指名なしで別のタスクを投げてみる。今度は空いているtoio2が
    落札するはず ── 「空いている方が安い」を体感する。
+
+> [!NOTE]
+> **A4実機で2台を同時に走らせるとき**は、2本目を1本目から**30秒以上空け**、
+> **1台目が向かっていない頂点**を指定する(狭いマットでの角接触を避けるため。
+> 詳しくは[章11の「実機で試す」](11_real_robot.md)と[章6](06_traffic.md))。
 
 「誰がやるか」が決まったら、2台が同時に走り出したとき**道をどう分け合うか**
 ── 交通調停へ進む。

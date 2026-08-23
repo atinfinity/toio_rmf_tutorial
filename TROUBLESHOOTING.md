@@ -100,6 +100,23 @@ ros2 launch toio_rmf_bringup toio_rmf.launch.py mat:=a3 run_sim:=true use_sim_ti
 
 ---
 
+## 起動直後の最初のタスク要求が消える(実機)
+
+**症状**: 実機で `Managed nodes are active` が出た直後にタスクを投げると、CLI は
+成功したように見えるのに**ロボットが動かない**。2回目以降は普通に通る。
+
+**原因**: 活性化直後は購読側の接続確立が間に合わず、**最初のCLI要求が届かない
+ことがある**([toio_rmf_bringup#55](https://github.com/atinfinity/toio_rmf_bringup/issues/55))。
+
+**対処**:
+
+- `Managed nodes are active` から**約25秒待って**から最初のタスクを投げる。
+- 投げたら、フリートアダプタのログに `Direct request … queued`(指名時)か、
+  ディスパッチャの `Add Task`(入札時)が出たことを確認する。出ていなければ
+  もう一度投げる(2回目は通る)。
+
+sim では起きにくいが、実機の毎回の立ち上げで意識しておくとよい([章11](11_real_robot.md))。
+
 ## バッテリが減らない / ChargeBattery が発火しない
 
 これは不具合ではなくシミュレーションの制約。実機の `battery_state` が

@@ -1,6 +1,6 @@
 # 章1: Open-RMFとは ── 概要と用語
 
-← [前章: 環境構築](00_setup.md) | [目次](../README.md) | 次章: [RMFの全体像を掴む →](02_architecture.md)
+← [前章: 環境構築](00_setup.md) | [目次](index.md) | 次章: [RMFの全体像を掴む →](02_architecture.md)
 
 ## 狙い
 
@@ -84,4 +84,4 @@ RMFの環境は**役割の違う3層**でできている ── 上が「何を�
 
 用語と全体像が揃ったら、次章でこの三層をノード一覧として実際に見る。
 
-← [前章: 環境構築](00_setup.md) | [目次](../README.md) | 次章: [RMFの全体像を掴む →](02_architecture.md)
+← [前章: 環境構築](00_setup.md) | [目次](index.md) | 次章: [RMFの全体像を掴む →](02_architecture.md)

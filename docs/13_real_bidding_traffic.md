@@ -1,6 +1,6 @@
 # 章13: 実機で入札と交通調停(bidding / traffic)
 
-← [前章: 実機で1台を動かす](12_real_go_to_place.md) | [目次](../README.md) | 次章: [実機でバッテリと自動充電 →](14_real_battery_charge.md)
+← [前章: 実機で1台を動かす](12_real_go_to_place.md) | [目次](index.md) | 次章: [実機でバッテリと自動充電 →](14_real_battery_charge.md)
 
 対応する第1部: [章5 2台と入札](05_bidding.md) / [章6 交通調停](06_traffic.md)
 
@@ -116,4 +116,4 @@ mutex 導入後は同条件で最接近 52 mm・forfeit 0 だが、待ちを短�
 2台の振る舞いが見えたら、次は実機編の山場 ── **本当に減るバッテリ**で
 ChargeBattery を発火させる。
 
-← [前章: 実機で1台を動かす](12_real_go_to_place.md) | [目次](../README.md) | 次章: [実機でバッテリと自動充電 →](14_real_battery_charge.md)
+← [前章: 実機で1台を動かす](12_real_go_to_place.md) | [目次](index.md) | 次章: [実機でバッテリと自動充電 →](14_real_battery_charge.md)

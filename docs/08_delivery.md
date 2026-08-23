@@ -1,6 +1,6 @@
 # 章8: 搬送とワークセル(delivery)
 
-← [前章: バッテリと自動充電](07_battery_charge.md) | [目次](../README.md) | 次章: [フリートアクション →](09_fleet_action.md)
+← [前章: バッテリと自動充電](07_battery_charge.md) | [目次](index.md) | 次章: [フリートアクション →](09_fleet_action.md)
 
 ## 狙い
 
@@ -120,4 +120,4 @@ dropoff はワークセル側で完結し、フリートのアクション(`deli
 荷役の「本物の分担」を見たら、次章では逆に**キューブ自身に演技をさせる**
 フリートアクションを扱う。
 
-← [前章: バッテリと自動充電](07_battery_charge.md) | [目次](../README.md) | 次章: [フリートアクション →](09_fleet_action.md)
+← [前章: バッテリと自動充電](07_battery_charge.md) | [目次](index.md) | 次章: [フリートアクション →](09_fleet_action.md)

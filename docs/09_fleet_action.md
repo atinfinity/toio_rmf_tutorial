@@ -1,6 +1,6 @@
 # 章9: フリートアクション(perform_action)
 
-← [前章: 搬送とワークセル](08_delivery.md) | [目次](../README.md) | 次章: [可視化とダッシュボード →](10_visualization.md)
+← [前章: 搬送とワークセル](08_delivery.md) | [目次](index.md) | 次章: [可視化とダッシュボード →](10_visualization.md)
 
 ## 狙い
 
@@ -112,4 +112,4 @@ perform_action / delivery の対比は [docs/TASKS.md の dispatch_action](https
 タスクの一通りを触ったら、次章はここまで散発的に使ってきた**可視化**を
 まとめ、ブラウザから操作できるダッシュボードも立てる。
 
-← [前章: 搬送とワークセル](08_delivery.md) | [目次](../README.md) | 次章: [可視化とダッシュボード →](10_visualization.md)
+← [前章: 搬送とワークセル](08_delivery.md) | [目次](index.md) | 次章: [可視化とダッシュボード →](10_visualization.md)

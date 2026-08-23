@@ -1,6 +1,6 @@
 # 章11: 実機へ(sim→real の考え方と準備)
 
-← [前章: 可視化とダッシュボード](10_visualization.md) | [目次](../README.md) | 次章: [実機で1台を動かす →](12_real_go_to_place.md)
+← [前章: 可視化とダッシュボード](10_visualization.md) | [目次](index.md) | 次章: [実機で1台を動かす →](12_real_go_to_place.md)
 
 ここから**第2部 実機編**。シミュレーションで学んだフリート処理を、**実機の
 toioキューブ**でもう一度なぞる。この章はその導入で、sim と real で**何が変わり、
@@ -147,4 +147,4 @@ TF待ちのタイムアウトは toio_navigation の `nav2_params.yaml` で **30
 
 まず章12で、sim で最初にやった「1台を1回動かす」を実機で繰り返す。
 
-← [前章: 可視化とダッシュボード](10_visualization.md) | [目次](../README.md) | 次章: [実機で1台を動かす →](12_real_go_to_place.md)
+← [前章: 可視化とダッシュボード](10_visualization.md) | [目次](index.md) | 次章: [実機で1台を動かす →](12_real_go_to_place.md)

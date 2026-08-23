@@ -1,6 +1,6 @@
 # 章14: 実機でバッテリと自動充電(ChargeBattery / Dock)
 
-← [前章: 実機で入札と交通調停](13_real_bidding_traffic.md) | [目次](../README.md) | 次章: [実機で搬送・アクション・可視化 →](15_real_delivery_action_viz.md)
+← [前章: 実機で入札と交通調停](13_real_bidding_traffic.md) | [目次](index.md) | 次章: [実機で搬送・アクション・可視化 →](15_real_delivery_action_viz.md)
 
 対応する第1部: [章7 バッテリと自動充電](07_battery_charge.md)
 
@@ -122,4 +122,4 @@ ros2 run rmf_demos_tasks cancel_task -id <task_id>
 バッテリまで見たら、残りは「移動以外のタスク」と「見る道具」。実機で初めて
 **音が鳴る**。
 
-← [前章: 実機で入札と交通調停](13_real_bidding_traffic.md) | [目次](../README.md) | 次章: [実機で搬送・アクション・可視化 →](15_real_delivery_action_viz.md)
+← [前章: 実機で入札と交通調停](13_real_bidding_traffic.md) | [目次](index.md) | 次章: [実機で搬送・アクション・可視化 →](15_real_delivery_action_viz.md)

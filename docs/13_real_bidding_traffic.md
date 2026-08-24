@@ -61,8 +61,6 @@ ros2 run rmf_demos_tasks dispatch_go_to_place -p patrol_B -F toio -R toio2
 
 toio2はチャージャーで待ち、toio1がチャージャーへ戻った瞬間に出発する。つまり**A4では2台同時のタスクは直列化される**。章6で見た「大域スケジュールで待つ」が、ここではmutexという形で現れている。
 
-![交通調停(sim の画像を流用)](images/06_traffic.gif)
-*第1部のA3での交差動画を流用。A4実機では交差は起きず、上のログのとおり片方がチャージャーで待つ形になる。*
 
 > mutexの調停にはRMFの `mutex_group_supervisor` が要り、[toio_rmf_bringup#60](https://github.com/atinfinity/toio_rmf_bringup/pull/60)以降の `toio_rmf.launch.py` に含まれている。無いと `Waiting to lock mutex groups` のまま動かない([TROUBLESHOOTING](TROUBLESHOOTING.md))。
 

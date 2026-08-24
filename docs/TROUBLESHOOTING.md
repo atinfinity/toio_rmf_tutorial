@@ -1,13 +1,14 @@
-# トラブルシューティング(シミュレーション)
+# トラブルシューティング
 
-このチュートリアルをシミュレーションで進める際に遭遇しやすい、
-**コマンドやコードの誤りではない**症状と対処をまとめる。ダッシュボード
-(rmf-web)まわりは [docs/DASHBOARD.md](https://github.com/atinfinity/toio_rmf_bringup/blob/main/docs/DASHBOARD.md)、
-起動引数の詳細は [README](https://github.com/atinfinity/toio_rmf_bringup/blob/main/README.md) を参照。
+このチュートリアルを進める際に遭遇しやすい、コマンドやコードの誤りではない
+症状と対処をまとめる。多くはシミュレーション向けだが、実機でも踏む項目には
+その旨を書いた。ダッシュボード(rmf-web)まわりは [docs/DASHBOARD.md](https://github.com/atinfinity/toio_rmf_bringup/blob/main/docs/DASHBOARD.md)、
+起動引数の詳細は [README](https://github.com/atinfinity/toio_rmf_bringup/blob/main/README.md)、
+実機だけのトラブル(BLE切断・マット境界・逆順起動)は[章16](16_real_troubles.md)を参照。
 
 ---
 
-## `cancel_task` がプロンプトに戻らない
+## `cancel_task` がプロンプトに戻らない → 要求は送信済み、`Ctrl-C` でよい
 
 **症状**: `cancel_task -id <task_id>` を実行すると、そのまま制御が戻らず
 固まったように見える。
@@ -16,7 +17,7 @@
 キャンセル要求(`ApiRequest`)を publish したあと、応答待ちのため spin に
 入ったまま自力で終了しない。
 
-**対処**: **キャンセル要求はすでに送信済み**なので、`Ctrl-C` で抜けてよい。
+**対処**: キャンセル要求はすでに送信済みなので、`Ctrl-C` で抜けてよい。
 抜けたあとに対象ロボットが巡回をやめてチャージャーへ戻れば成功。
 `rmf_task_dispatcher` / `fleet_adapter` のログに
 `Canceling go_to_place ...` → `Goal canceled` が出ることでも確認できる。
@@ -27,25 +28,34 @@
 
 ## 起動直後に投げた最初のタスクが動かない(CLI は成功を返す)
 
-`Managed nodes are active` が 2 つ出た直後(25 秒以内)に投げた 1 本目の
-`rmf_demos_tasks` 要求が、どこにも届かずに消えることがある。CLI は要求を
-1 回 publish して終了するので、DDS の discovery が終わる前だと dispatcher /
-フリートアダプタにマッチしないまま捨てられる
+**症状**: `Managed nodes are active` が出た直後にタスクを投げると、CLI は
+成功したように見えるのにロボットが動かない。2回目以降は普通に通る。
+sim では起きにくいが、実機では毎回の立ち上げで起きうる
 ([toio_rmf_bringup#55](https://github.com/atinfinity/toio_rmf_bringup/issues/55))。
-実機の RMF スタックは参加者が約 60 あり、discovery に 10〜25 秒かかる。
 
-- 起動後 25 秒ほど待ってから最初のタスクを投げる
-- 届いたかは端末Aのログで分かる: 指名(`-R`)なら
+**原因**: 1 本目の `rmf_demos_tasks` 要求が、どこにも届かずに消えている。
+CLI は要求を 1 回 publish して終了するので、DDS の discovery が終わる前だと
+dispatcher / フリートアダプタにマッチしないまま捨てられる。実機の RMF スタックは
+参加者が約 60 あり、discovery に 10〜25 秒かかる。
+
+**対処**:
+
+- `Managed nodes are active` から約 25 秒待ってから最初のタスクを投げる
+- 届いたかはログで分かる(sim なら端末A、実機なら端末2): 指名(`-R`)なら
   `Direct request [...] successfully queued for robot [toioN]`、未指名なら
   `Add Task [...] to a bidding queue`。数秒待っても出なければ同じコマンドを
   もう一度投げる(重複して届くことはない。1 本目は消えている)
 
-## ロボットが `Waiting to lock mutex groups [...]` のまま動かない
+実機での毎回の作法としては[章11](11_real_robot.md)に書いた。
+
+---
+
+## ロボットが `Waiting to lock mutex groups [...]` のまま動かない → `mutex_group_supervisor` の有無を見る
 
 A4 の navグラフはループ全体が mutex group `ring` に入っている
 ([toio_rmf_maps#16](https://github.com/atinfinity/toio_rmf_maps/pull/16))。mutex の
-取得は RMF の `mutex_group_supervisor` ノードが仲介するので、これが起動していないと
-誰も保持していない group を永遠に待つ。
+取得は RMF の `mutex_group_supervisor` ノードが仲介する。これが起動していないと
+ロックは誰にも配られず、ロボットは実際には空いている group をいつまでも待ち続ける。
 
 - `ros2 node list | grep mutex_group_supervisor` で居るか確認する
 - toio_rmf_bringup を [#60](https://github.com/atinfinity/toio_rmf_bringup/pull/60)
@@ -53,7 +63,9 @@ A4 の navグラフはループ全体が mutex group `ring` に入っている
 - 2台目が `... but that mutex is currently held by [toio/toio1]` と出しているなら
   正常な待ち(ループ上に1台ずつ)。1台目がチャージャーへ戻れば動き出す
 
-## `/fleet_states` を `echo` しても何も出ない
+---
+
+## `/fleet_states` を `echo` しても何も出ない → `--once` を外す
 
 **症状**: `ros2 topic echo /fleet_states --once` が
 `does not appear to be published yet` のまま、あるいは何も表示せず終わる。
@@ -74,7 +86,7 @@ ros2 topic echo /fleet_states
 
 ## 2回目以降の起動でロボットが登録されない / `/fleet_states` が空
 
-同一マシンでシミュレーションを**起動し直した2回目以降**に起きやすい、
+同一マシンでシミュレーションを起動し直した2回目以降に起きやすい、
 一見「マット(例: A4)固有のバグ」に見える症状。実際は環境の後片付け不足が
 原因で、コードやマットの問題ではない。
 
@@ -88,12 +100,11 @@ ros2 topic echo /fleet_states
   (`frame does not exist`)。一方で Nav2 自体は `Managed nodes are active`
   まで進んでいる
 
-**原因**: 前回起動の**ゾンビプロセスの残存**と、
-**FastDDS の共有メモリ枯渇**。特に `gz sim` を強制終了(`kill -9`)すると、
-`static_transform_publisher` などの子プロセスが親から切り離されて生き残り、
-グローバルな `/tf` に**古い世代の衝突する変換**を流し続ける。さらに
-`/dev/shm` に `fastrtps_*` セグメントが大量に溜まると、新しい参加者の
-ホスト内ディスカバリが成立しなくなる。
+**原因**: 前回起動のゾンビプロセスの残存と、FastDDS の共有メモリ枯渇。
+特に `gz sim` を強制終了(`kill -9`)すると、`static_transform_publisher` などの
+子プロセスが親から切り離されて生き残り、グローバルな `/tf` に古い世代の衝突する
+変換を流し続ける。さらに `/dev/shm` に `fastrtps_*` セグメントが大量に溜まると、
+新しい参加者のホスト内ディスカバリが成立しなくなる。
 
 **対処**: 次の起動前に、プロセスと共有メモリを完全に掃除して、
 別の `ROS_DOMAIN_ID` で起動し直す:
@@ -121,33 +132,17 @@ ros2 launch toio_rmf_bringup toio_rmf.launch.py mat:=a3 run_sim:=true use_sim_ti
 (と `toio2`)が出て、`/fleet_states` に2台とも現れる。
 
 > [!NOTE]
-> `pkill -f "a|b|c"` の**選言(`|`)は効かない**。`pkill -f` のパターンは
+> `pkill -f "a|b|c"` の選言(`|`)は効かない。`pkill -f` のパターンは
 > 基本正規表現として1つの文字列に照合されるため、`|` は区切りとして
 > 解釈されず何にもマッチしない。上のように `ps | grep -E | awk` で
 > PID を集めて `kill` するのが確実。
 
 ---
 
-## 起動直後の最初のタスク要求が消える(実機)
+## バッテリが減らない / ChargeBattery が発火しない → sim の仕様
 
-**症状**: 実機で `Managed nodes are active` が出た直後にタスクを投げると、CLI は
-成功したように見えるのに**ロボットが動かない**。2回目以降は普通に通る。
-
-**原因**: 活性化直後は購読側の接続確立が間に合わず、**最初のCLI要求が届かない
-ことがある**([toio_rmf_bringup#55](https://github.com/atinfinity/toio_rmf_bringup/issues/55))。
-
-**対処**:
-
-- `Managed nodes are active` から**約25秒待って**から最初のタスクを投げる。
-- 投げたら、フリートアダプタのログに `Direct request … queued`(指名時)か、
-  ディスパッチャの `Add Task`(入札時)が出たことを確認する。出ていなければ
-  もう一度投げる(2回目は通る)。
-
-sim では起きにくいが、実機の毎回の立ち上げで意識しておくとよい([章11](11_real_robot.md)、[章16](16_real_troubles.md))。
-
-## バッテリが減らない / ChargeBattery が発火しない
-
-これは不具合ではなくシミュレーションの制約。実機の `battery_state` が
+不具合ではなくシミュレーションの制約。実機の `battery_state` が
 sim には無いため `battery_percent` は 100.0% のまま動かず、自動充電
-(ChargeBattery)は sim では発火しない。詳細と裏取りの手順は
+(ChargeBattery)は既定の sim では発火しない。sim で見たいときは
+`publish_battery:=true` で疑似バッテリを有効にする。詳細と裏取りの手順は
 [章7](07_battery_charge.md)に記載。

@@ -6,15 +6,13 @@
 
 - 「移動」だけでない **delivery**(荷物をpickup地点で受け取りdropoff地点で
   降ろす搬送)タスクを扱う
-- RMFの delivery では荷役を**ロボットではなくワークセル**(dispenser /
-  ingestor)が担う、という**役割分担**を理解する
+- RMFの delivery では荷役をロボットではなくワークセル(dispenser /
+  ingestor)が担う、という役割分担を理解する
 - タスクが「フェーズの列」でできていることを、移動と荷役の組み合わせで見る
 
 > [!NOTE]
-> delivery は **Ubuntu 24.04 + apt の Open-RMF(本チュートリアルの前提環境)では
-> そのまま動く**(このリポジトリで pickup→dropoff の完走を実測確認)。
-> macOS/RoboStack でソースビルドした RMF では別の既知問題でクラッシュすることが
-> ある(下の「補足: 環境による既知問題」を参照)。
+> Ubuntu 24.04 + apt の Open-RMF(本チュートリアルの前提環境)では delivery は
+> そのまま動く。macOS/RoboStack でソースビルドした RMF での既知問題は章末の補足を参照。
 
 ## ワークセルという登場人物
 
@@ -24,28 +22,13 @@
 - **dispenser**(払い出し機): pickup地点で荷物をロボットに載せる係
 - **ingestor**(受け入れ機): dropoff地点で荷物を受け取る係
 
-フリート(ロボット)の仕事は**waypoint間の移動だけ**。着いたらワークセルに
+フリート(ロボット)の仕事はwaypoint間の移動だけ。着いたらワークセルに
 「荷役して」と要求を投げ、ワークセルが「完了」を返したら次へ進む。
 
 toioのマットに実際に運べる物は無いので、`toio_rmf.launch.py` が
-**mockワークセル**(`toio_dispenser` / `toio_ingestor`)を起動する。要求に対して
+mockワークセル(`toio_dispenser` / `toio_ingestor`)を起動する。要求に対して
 一定時間後に「完了」を返すだけで、実際には何も運ばない。これは
 [章2](02_architecture.md)で `ros2 node list` に出ていたノード。
-
-## 補足: 環境による既知問題(Ubuntuでは無関係)
-
-**Ubuntu 24.04 + apt の Open-RMF では delivery はそのまま動く。** このリポジトリでの
-実測(toio_gazebo, A3)では、入札 → 落札 → `patrol_A`(dispenser で pickup)→
-`patrol_D`(ingestor で dropoff)→ チャージャー帰還まで、fleet_adapter が
-**クラッシュせず完走**した。
-
-一方 **macOS/RoboStack でソースビルドした RMF** では、delivery 開始時に
-`rmf_task_sequence` の `std::optional<nlohmann::json>` の ABI 不整合で
-fleet_adapter が異常終了する既知の問題がある
-([#20](https://github.com/atinfinity/toio_rmf_bringup/issues/20))。原因は
-ライブラリ間の nlohmann コンパイル定義(`JSON_DIAGNOSTICS` 等)の食い違いにある。
-**一貫ビルドされた apt deb では再現しない。** この章は Ubuntu 前提なので、
-通常この問題には遭遇しない。
 
 ## 動かす
 
@@ -70,7 +53,7 @@ ros2 run rmf_demos_tasks dispatch_delivery -p patrol_A -ph toio_dispenser \
 ビューで並べたもの。左が RViz2(RMFスケジュール可視化)、右が toio_gazebo。各地点で
 ワークセルの処理を待つ間、頂点上で停止して見える。*
 
-タスクは**移動→荷役→移動→荷役**の順で進む:
+タスクは移動→荷役→移動→荷役の順で進む:
 
 1. ロボットが `patrol_A`(pickup)へ移動
 2. `toio_dispenser` へ **DispenserRequest** を送る。ワークセルが既定3秒
@@ -87,28 +70,23 @@ ros2 topic echo /dispenser_requests   # 別端末で。pickup到達時に要求�
 荷役の待ち時間は `mock_workcells.py --handle-seconds`(既定3秒)。詳しい
 シーケンス図は [docs/TASKS.md の deliveryタスク](https://github.com/atinfinity/toio_rmf_bringup/blob/main/docs/TASKS.md)にある。
 
-**注意**: 標準の delivery では**キューブのLED・効果音は出ない**。pickup /
+**注意**: 標準の delivery ではキューブのLED・効果音は出ない。pickup /
 dropoff はワークセル側で完結し、フリートのアクション(`delivery_pickup` /
 `delivery_dropoff`)は呼ばれない。キューブ側で「荷役してる感」を出したい場合
 は次章の perform_action を使う。
 
 ## 理解する
 
-- delivery では、タスクが**フェーズの列**でできているという構造が最もはっきり
-  見える。「移動フェーズ → 荷役フェーズ → 移動フェーズ → 荷役フェーズ」と積まれて
-  いる。go_to_place(移動1つ)、patrol(移動の繰り返し)からの発展として
-  捉えると一貫する。
-- **役割分担**が肝。ロボットは移動だけ、荷役はワークセル。この分離のおかげで、
-  実際の倉庫では「アームを持つ払い出し機」「ベルトコンベアの受け入れ口」など
-  ロボットとは別のハードにワークセルを割り当てられる。toioでは運ぶ物が無いので
-  mockが「完了」を返すだけの実装になっている。
-- ワークセルへの要求は `DispenserRequest` / `IngestorRequest` という専用の
-  トピックで飛ぶ。**フリートアダプタは移動をNav2へ、荷役をワークセルへ、と
-  別々の相手に指示を出している**。
+delivery では、タスクが「移動フェーズ → 荷役フェーズ → 移動フェーズ → 荷役フェーズ」と
+積まれていて、フェーズの列という構造が最もはっきり見える。肝は役割分担で、ロボットは
+移動だけ、荷役は `DispenserRequest` / `IngestorRequest` という専用トピックでワークセルに
+頼む。つまり**フリートアダプタは移動をNav2へ、荷役をワークセルへ、と別々の相手に指示を
+出している**。この分離のおかげで、実際の倉庫では「アームを持つ払い出し機」「ベルト
+コンベアの受け入れ口」などロボットとは別のハードにワークセルを割り当てられる。
 
 ## 確認課題
 
-1. delivery を投げ、ロボットが pickup 地点で**約3秒停止**してから dropoff へ
+1. delivery を投げ、ロボットが pickup 地点で約3秒停止してから dropoff へ
    向かうことを観察する。この停止が DispenserRequest の処理時間。
 2. `/dispenser_requests` と `/ingestor_requests` をechoし、pickup到達時と
    dropoff到達時にそれぞれ要求が飛ぶことを確認する。「移動」と「荷役」で
@@ -117,7 +95,18 @@ dropoff はワークセル側で完結し、フリートのアクション(`deli
    行く)で代用したときと比べ、delivery が余分に何をしているか(つまり荷役
    フェーズ)を言葉にする。
 
-荷役の「本物の分担」を見たら、次章では逆に**キューブ自身に演技をさせる**
-フリートアクションを扱う。
+## 補足: 環境による既知問題(Ubuntuでは無関係)
+
+Ubuntu 24.04 + apt の Open-RMF では delivery はそのまま動く。このリポジトリでの
+実測(toio_gazebo, A3)では、入札 → 落札 → `patrol_A`(dispenser で pickup)→
+`patrol_D`(ingestor で dropoff)→ チャージャー帰還まで、fleet_adapter が
+クラッシュせず完走した。
+
+一方、macOS/RoboStack でソースビルドした RMF には既知の問題がある
+([#20](https://github.com/atinfinity/toio_rmf_bringup/issues/20))。delivery 開始時に
+fleet_adapter が異常終了するもので、原因は `rmf_task_sequence` が扱う
+`std::optional<nlohmann::json>` の ABI 不整合 ── ライブラリ間で nlohmann の
+コンパイル定義(`JSON_DIAGNOSTICS` 等)が食い違っている。一貫ビルドされた apt deb
+では再現しない。
 
 ← [前章: バッテリと自動充電](07_battery_charge.md) | [目次](index.md) | 次章: [フリートアクション →](09_fleet_action.md)

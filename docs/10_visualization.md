@@ -5,15 +5,12 @@
 ## 狙い
 
 - ここまで断片的に使ってきた RViz の見方を整理する(何がどの層の情報か)
-- ブラウザからタスク投入・監視ができる rmf-webダッシュボードを立てる
-  (任意 ── CLIとRVizだけでも運用できる)
+- ブラウザからタスク投入・監視ができる rmf-webダッシュボードを立てる(任意 ── CLIとRVizだけでも運用できる)
 - sim編の総仕上げとして、「投入 → 走行 → 完了」をGUIで一望する
 
 ## RVizで何が見えているか ── マーカーの読み方
 
-`toio_rmf.launch.py` は既定でRVizを起動する。真上から見た絵には複数の図形が
-重なっている。それぞれ別のトピックから来る「フリート処理の内部状態」で、
-担当ノードも異なる。
+`toio_rmf.launch.py` は既定でRVizを起動する。真上から見た絵には複数の図形が重なっている。それぞれ別のトピックから来る「フリート処理の内部状態」で、担当ノードも異なる。
 
 ### 待機中(idle)の絵
 
@@ -31,8 +28,7 @@
 | **グレーの矩形(黒枠)** | 床面図(floorplan) | マットの外形 | `/floorplan`(building_map_server) |
 | 細いグレーの方眼 | Grid | RVizの目盛り(5cm刻み)。マーカーではない | RViz内蔵 |
 
-navグラフ(オレンジ)はRMFの「地図」([章4](04_patrol.md))を表し、マゼンタの球は
-フリートの「自己申告」([章2](02_architecture.md))を表す。
+navグラフ(オレンジ)はRMFの「地図」([章4](04_patrol.md))を表し、マゼンタの球はフリートの「自己申告」([章2](02_architecture.md))を表す。
 
 ### 走行中の絵 ── 稼働中のマーカーが増える
 
@@ -44,45 +40,26 @@ navグラフ(オレンジ)はRMFの「地図」([章4](04_patrol.md))を表し�
 | **緑の帯** | スケジュール(schedule) | `rmf_traffic_schedule` が予約した将来の走行経路。稼働中のロボットにだけ出る。2台が競合するとここで譲り合いが見える([章6](06_traffic.md)) | `/schedule_markers`(ns `participant N`) |
 | **teal/黄の円**(vicinity / footprint) | 予約軌道上の周辺域・占有域 | 既定では非表示(下記)。スケジュールが予約した軌道上の位置に描かれる ── vicinityは他機への「近づくな」領域、footprintは占有面積を指す | `/schedule_markers`(ns `participant location N`) |
 
-つまり色で層が分かれている ── **オレンジは地図(静的)、マゼンタはロボットの
-実位置、緑はいま走っているロボットの予約経路(動的)を示す**。
+つまり色で層が分かれている ── **オレンジは地図(静的)、マゼンタはロボットの実位置、緑はいま走っているロボットの予約経路(動的)を示す**。
 
 ### なぜ footprint/vicinity を既定で隠しているか
 
-teal/黄の円はスケジュール(予約)軌道上の位置に描かれ、ロボット本体(マゼンタ)の
-現在位置とは別物。ロボットは方向転換のたびに一瞬止まるため(Nav2 の RPP コントローラ
-(Regulated Pure Pursuit)の `use_rotate_to_heading`)、予約軌道に対して遅れたり
-追いついたりを繰り返す。その差で teal/黄の円が前後に跳ねて見える(ロボット自体の
-動きは滑らかで、実測でも確認済み)。混乱を避けるため `rviz/toio_rmf.rviz` の
-`ScheduleMarkers` で namespace `participant location *` を `false` にして**既定で
-非表示**にしている。緑の予約経路帯(`participant *`)は残している。
+teal/黄の円はスケジュール(予約)軌道上の位置に描かれ、ロボット本体(マゼンタ)の現在位置とは別物。ロボットは方向転換のたびに一瞬止まるため(Nav2 の RPP コントローラ(Regulated Pure Pursuit)の `use_rotate_to_heading`)、予約軌道に対して遅れたり追いついたりを繰り返す。その差で teal/黄の円が前後に跳ねて見える(ロボット自体の動きは滑らかで、実測でも確認済み)。混乱を避けるため `rviz/toio_rmf.rviz` の `ScheduleMarkers` で namespace `participant location *` を `false` にして**既定で非表示**にしている。緑の予約経路帯(`participant *`)は残している。
 
-再表示したい場合は、RVizの `ScheduleMarkers` 表示を開き `participant location 0/1`
-のチェックを入れる(または当該 namespace を `true` にする)。有効化すると、稼働中の
-ロボットの周囲に teal(vicinity)と黄(footprint)の円が現れる:
+再表示したい場合は、RVizの `ScheduleMarkers` 表示を開き `participant location 0/1` のチェックを入れる(または当該 namespace を `true` にする)。有効化すると、稼働中のロボットの周囲に teal(vicinity)と黄(footprint)の円が現れる:
 
 ![footprint/vicinityを有効化したRViz](images/10_footprint_vicinity.png)
-*参考:`participant location` を表示した状態。2台のロボットに teal の vicinity と
-黄の footprint の円が描かれる(既定ではこれらを非表示にしている。本チュートリアルの
-他のスクリーンショット・動画は既定で非表示にした状態で撮影している)。*
+*参考:`participant location` を表示した状態。2台のロボットに teal の vicinity と黄の footprint の円が描かれる(既定ではこれらを非表示にしている。本チュートリアルの他のスクリーンショット・動画は既定で非表示にした状態で撮影している)。*
 
-footprint / vicinity を表示した場合、[章0](00_setup.md)のパッチを当てていない環境では、
-これらが高さ1m級の巨大な円柱になってnavグラフを覆い隠す。toioのマットは数cm〜
-数十cmで、RMFの可視化は数十m級の建物向けに作られているためだ。パッチの背景は
-[docs/SETUP.md](https://github.com/atinfinity/toio_rmf_bringup/blob/main/docs/SETUP.md) に詳しい。
+footprint / vicinity を表示した場合、[章0](00_setup.md)のパッチを当てていない環境では、これらが高さ1m級の巨大な円柱になってnavグラフを覆い隠す。toioのマットは数cm〜数十cmで、RMFの可視化は数十m級の建物向けに作られているためだ。パッチの背景は[docs/SETUP.md](https://github.com/atinfinity/toio_rmf_bringup/blob/main/docs/SETUP.md) に詳しい。
 
-ここで[章6](06_traffic.md)の2台交差タスクをもう一度投げてみるとよい。RVizで
-経路帯が2本引かれ、競合区間で片方が待つ/迂回する様子が見える。CLIログで
-読んでいた交通調停が、絵として一望できる。
+ここで[章6](06_traffic.md)の2台交差タスクをもう一度投げてみるとよい。RVizで経路帯が2本引かれ、競合区間で片方が待つ/迂回する様子が見える。CLIログで読んでいた交通調停が、絵として一望できる。
 
 ## rmf-webダッシュボード(任意)
 
-ブラウザからタスクを投げ、フリートを監視するGUI。ROS 2スタックはホストで
-そのまま動かし、rmf-webだけをコンテナ化する構成。使わなくても本パッケージ
-の動作には影響しないので、GUIを試したい人向け。
+ブラウザからタスクを投げ、フリートを監視するGUI。ROS 2スタックはホストでそのまま動かし、rmf-webだけをコンテナ化する構成。使わなくても本パッケージの動作には影響しないので、GUIを試したい人向け。
 
-構築とトラブルシュートの全ては [docs/DASHBOARD.md](https://github.com/atinfinity/toio_rmf_bringup/blob/main/docs/DASHBOARD.md) に
-あるので、ここでは最短の流れだけ示す。
+構築とトラブルシュートの全ては [docs/DASHBOARD.md](https://github.com/atinfinity/toio_rmf_bringup/blob/main/docs/DASHBOARD.md) にあるので、ここでは最短の流れだけ示す。
 
 ### 1. ダッシュボードイメージをビルド(初回のみ)
 
@@ -113,42 +90,26 @@ ros2 launch toio_rmf_bringup toio_rmf.launch.py \
 <http://localhost:3000>
 
 - **Map** タブ … マットと2台のキューブ
-- **Robots** タブ … `toio1` / `toio2` がフリート `toio` として並び、位置と
-  バッテリが更新される([章7](07_battery_charge.md)で見た値がGUIに出る)
+- **Robots** タブ … `toio1` / `toio2` がフリート `toio` として並び、位置とバッテリが更新される([章7](07_battery_charge.md)で見た値がGUIに出る)
 - **Tasks** タブ … patrol / delivery をフォームから投入できる
 
 ![rmf-webダッシュボードのRobotsタブ](images/10_dashboard_robots.png)
-*Robotsタブ ── `toio1` / `toio2` がフリート `toio` として並び、Level=L1・
-Battery=100.00%・Status=CHARGING を表示(api-server が `server_uri` の
-WebSocket 経由でフリート状態を受信している)。Battery が 100% 固定なのは
-[章7](07_battery_charge.md)のとおり sim の制約。*
+*Robotsタブ ── `toio1` / `toio2` がフリート `toio` として並び、Level=L1・Battery=100.00%・Status=CHARGING を表示(api-server が `server_uri` のWebSocket 経由でフリート状態を受信している)。Battery が 100% 固定なのは[章7](07_battery_charge.md)のとおり sim の制約。*
 
-Tasksタブから patrol を投入し、CLI(`dispatch_patrol`)で投げたときと同じタスクが
-GUIにも現れることを確認する。CLIとGUIは同じRMFコアに繋がっている ── 入口が違うだけ。
+Tasksタブから patrol を投入し、CLI(`dispatch_patrol`)で投げたときと同じタスクがGUIにも現れることを確認する。CLIとGUIは同じRMFコアに繋がっている ── 入口が違うだけ。
 
-> ダッシュボードには既知の注意点(白画面・マーカーがマットを覆う・macOSでの
-> ネットワーク制約など)がいくつかある。詰まったら
-> [docs/DASHBOARD.md のトラブルシュート](https://github.com/atinfinity/toio_rmf_bringup/blob/main/docs/DASHBOARD.md)を先に見ること。
+> ダッシュボードには既知の注意点(白画面・マーカーがマットを覆う・macOSでのネットワーク制約など)がいくつかある。詰まったら[docs/DASHBOARD.md のトラブルシュート](https://github.com/atinfinity/toio_rmf_bringup/blob/main/docs/DASHBOARD.md)を先に見ること。
 
 ## 理解する
 
-- **RVizは開発者の観察窓、ダッシュボードは運用者の操作卓**。RVizは内部状態
-  (予約・TF・navグラフ)を細かく見るのに向き、rmf-webは「タスクを投げて
-  結果を見る」運用に向く。目的で使い分ける。
-- どちらもRMFコアの状態を映しているだけで、コアの動作を変えるものでは
-  ない。GUIから投げたpatrolも、CLIから投げたpatrolも、入札→交通調停→充電
-  という同じ処理を通る(章5〜7)。可視化は理解を助けるが、本質は下の層に
-  ある、という視点を保つ。
+- **RVizは開発者の観察窓、ダッシュボードは運用者の操作卓**。RVizは内部状態(予約・TF・navグラフ)を細かく見るのに向き、rmf-webは「タスクを投げて結果を見る」運用に向く。目的で使い分ける。
+- どちらもRMFコアの状態を映しているだけで、コアの動作を変えるものではない。GUIから投げたpatrolも、CLIから投げたpatrolも、入札→交通調停→充電という同じ処理を通る(章5〜7)。可視化は理解を助けるが、本質は下の層にある、という視点を保つ。
 
 ## 確認課題
 
-1. RVizで2台交差タスクの経路帯を観察し、[章6](06_traffic.md)でログから読んだ
-   「待ち・迂回」が絵として一致することを確認する。
-2. (ダッシュボードを立てた人)Tasksタブから patrol を投入し、Robotsタブで
-   バッテリと位置が更新されるのを見る。CLI投入のタスクもTasks一覧に出るか。
+1. RVizで2台交差タスクの経路帯を観察し、[章6](06_traffic.md)でログから読んだ「待ち・迂回」が絵として一致することを確認する。
+2. (ダッシュボードを立てた人)Tasksタブから patrol を投入し、Robotsタブでバッテリと位置が更新されるのを見る。CLI投入のタスクもTasks一覧に出るか。
 
-これで第1部(シミュレーション編)は完走。第2部では、ここまで学んだことを
-実機のtoioキューブへ持っていく ── 何が変わり、何が変わらないかを、章ごとに
-もう一度なぞる。
+これで第1部(シミュレーション編)は完走。第2部では、ここまで学んだことを実機のtoioキューブへ持っていく ── 何が変わり、何が変わらないかを、章ごとにもう一度なぞる。
 
 ← [前章: フリートアクション](09_fleet_action.md) | [目次](index.md) | 次章: [第2部 実機へ →](11_real_robot.md)

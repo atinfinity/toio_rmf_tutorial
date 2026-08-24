@@ -1,0 +1,1461 @@
+
+<!doctype html>
+<html lang="ja" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://atinfinity.github.io/toio_rmf_tutorial/07_battery_charge/">
+      
+      
+        <link rel="prev" href="../06_traffic/">
+      
+      
+        <link rel="next" href="../08_delivery/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>章7 バッテリと自動充電 - toioで学ぶ Open-RMF フリート処理</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.ec1eaa64.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#7-chargebattery" class="md-skip">
+          コンテンツにスキップ
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="ヘッダー">
+    <a href=".." title="toioで学ぶ Open-RMF フリート処理" class="md-header__button md-logo" aria-label="toioで学ぶ Open-RMF フリート処理" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            toioで学ぶ Open-RMF フリート処理
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              章7 バッテリと自動充電
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="検索" placeholder="検索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="検索">
+        
+        <button type="reset" class="md-search__icon md-icon" title="クリア" aria-label="クリア" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            検索を初期化
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/atinfinity/toio_rmf_tutorial" title="リポジトリへ" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="ナビゲーション" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="toioで学ぶ Open-RMF フリート処理" class="md-nav__button md-logo" aria-label="toioで学ぶ Open-RMF フリート処理" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    toioで学ぶ Open-RMF フリート処理
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/atinfinity/toio_rmf_tutorial" title="リポジトリへ" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第1部 シミュレーション編
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    第1部 シミュレーション編
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../00_setup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    章0 環境構築とスモークテスト
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../01_overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    章1 Open-RMFとは(概要と用語)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../02_architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    章2 RMFの全体像を掴む
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../03_go_to_place/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    章3 1台を動かす(go_to_place)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../04_patrol/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    章4 巡回と帰還(patrol)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../05_bidding/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    章5 2台と入札(bidding)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../06_traffic/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    章6 交通調停(traffic)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    章7 バッテリと自動充電
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    章7 バッテリと自動充電
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="目次">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目次
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        狙い
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#chargebattery" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ChargeBatteryは「投げない」タスク
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        状態遷移で捉える
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        動かす・観察する
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="動かす・観察する">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. バッテリの現在値を見る
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-simchargebattery-publish_battery" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. 既定のsimではChargeBatteryは発火しない ── publish_battery で見る
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-finishing_request" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. 完了後の自動帰還を見る(finishing_request)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        キャンセルと帰還
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        理解する
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        確認課題
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../08_delivery/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    章8 搬送とワークセル(delivery)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../09_fleet_action/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    章9 フリートアクション
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../10_visualization/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    章10 可視化とダッシュボード
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第2部 実機編
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    第2部 実機編
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../11_real_robot/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    章11 実機へ(sim→real の考え方と準備)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../12_real_go_to_place/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    章12 実機で1台を動かす
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../13_real_bidding_traffic/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    章13 実機で入札と交通調停
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../14_real_battery_charge/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    章14 実機でバッテリと自動充電
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../15_real_delivery_action_viz/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    章15 実機で搬送・アクション・可視化
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../16_real_troubles/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    章16 実機特有のトラブルと復帰
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../17_real_graduation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    章17 卒業課題とまとめ
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    付録
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    付録
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../TROUBLESHOOTING/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    トラブルシューティング
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../CAPTURE/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    メディア撮影手順(CAPTURE)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目次">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目次
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        狙い
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#chargebattery" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ChargeBatteryは「投げない」タスク
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        状態遷移で捉える
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        動かす・観察する
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="動かす・観察する">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. バッテリの現在値を見る
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-simchargebattery-publish_battery" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. 既定のsimではChargeBatteryは発火しない ── publish_battery で見る
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-finishing_request" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. 完了後の自動帰還を見る(finishing_request)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        キャンセルと帰還
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        理解する
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        確認課題
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="7-chargebattery">章7: バッテリと自動充電(ChargeBattery)</h1>
+<p>← <a href="../06_traffic/">前章: 交通調停</a> | <a href="../">目次</a> | 次章: <a href="../08_delivery/">搬送とワークセル →</a></p>
+<h2 id="_1">狙い</h2>
+<ul>
+<li>RMFがロボットのバッテリを見張り、尽きる前に勝手に充電へ帰す仕組みを知る</li>
+<li>明示的に投げるタスクではない<strong>ChargeBattery</strong> が、どんな条件で自動計画されるかをフリート設定から理解する</li>
+<li>実行中タスクをキャンセルする操作を覚える(充電・帰還と絡む)</li>
+</ul>
+<p>入札(章5)・交通調停(章6)に続く、フリートの自己管理の層。</p>
+<h2 id="chargebattery">ChargeBatteryは「投げない」タスク</h2>
+<p>これまでのタスク(go_to_place / patrol)はCLIから投げた。ChargeBatteryは違い、<strong>RMFが「このままだとバッテリが足りない」と判断したときに自動で計画する</strong>。運用者が忘れていても、ロボットが自分で充電に帰る ── これがフリートを長時間ほったらかせる理由。</p>
+<p>判断はフリート設定 <code>toio_fleet_config_&lt;mat&gt;.yaml</code> の値で決まる:</p>
+<table>
+<thead>
+<tr>
+<th>パラメータ</th>
+<th>値</th>
+<th>意味</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>recharge_threshold</code></td>
+<td><code>0.2</code></td>
+<td>残量がこれを下回る見込みになると充電を計画</td>
+</tr>
+<tr>
+<td><code>recharge_soc</code></td>
+<td><code>1.0</code></td>
+<td>充電の目標残量(満充電)</td>
+</tr>
+<tr>
+<td><code>account_for_battery_drain</code></td>
+<td><code>true</code></td>
+<td>見積もり時にバッテリ消費を織り込む</td>
+</tr>
+<tr>
+<td><code>finishing_request</code></td>
+<td><code>"charge"</code></td>
+<td>タスク完了後もチャージャーへ帰す</td>
+</tr>
+</tbody>
+</table>
+<p><code>account_for_battery_drain: true</code> が効いているので、RMFは入札の段階から「このタスクを最後までやったらバッテリはいくつになる?」を計算している。足りなくなる見込みなら、先に充電を挟む。</p>
+<h2 id="_2">状態遷移で捉える</h2>
+<pre class="mermaid"><code>stateDiagram-v2
+    [*] --&gt; idle
+    idle: 待機（charger で待機・充電）
+    run: 実行中（patrol / delivery などを実行）
+    recharge: 充電帰還（ChargeBattery を自動計画）
+    idle --&gt; run: タスク受注
+    run --&gt; idle: 完了時 finishing_request（charge）で帰還
+    run --&gt; recharge: 残量が recharge_threshold を下回る見込み
+    recharge --&gt; idle: 自機の charger へ帰り充電待機</code></pre>
+<p>図の詳細版は<a href="https://github.com/atinfinity/toio_rmf_bringup/blob/main/docs/TASKS.md">docs/TASKS.mdのChargeBattery</a>にある。</p>
+<h2 id="_3">動かす・観察する</h2>
+<h3 id="1">1. バッテリの現在値を見る</h3>
+<p>各ロボットの <code>battery_percent</code> は <code>/fleet_states</code> に入っている:</p>
+<div class="highlight"><pre><span></span><code>ros2<span class="w"> </span>topic<span class="w"> </span><span class="nb">echo</span><span class="w"> </span>/fleet_states<span class="w"> </span>--once
+</code></pre></div>
+<div class="admonition tip">
+<p class="admonition-title">Important</p>
+<p><strong>シミュレーションではこの値は100%に固定</strong>され、放電も充電もしない。toioのアダプタは実機の <code>/toioN/toio/battery_state</code> を残量の入力にしており、simにはそれが無いためだ。</p>
+</div>
+<p>フリート設定の <code>account_for_battery_drain</code> は、タスクの見積り(入札コスト)には効くが、報告される残量そのものは動かさない。実機ではこの値がキューブの実測(10%刻みの離散値)由来になり、25分のタスク走行で90% → 70%ほど減る。実機での確認は<a href="../14_real_battery_charge/">章14</a>。</p>
+<h3 id="2-simchargebattery-publish_battery">2. 既定のsimではChargeBatteryは発火しない ── <code>publish_battery</code> で見る</h3>
+<p>上の状態遷移の「実行中 → 充電帰還」は、残量が <code>recharge_threshold</code> を下回る見込みになると起きる。しかしsimでは残量が100%に張り付いたままなので、既定の起動ではChargeBatteryは発火しない(このリポジトリで実測確認)。patrolを30周させても <code>battery_percent</code> は100.0%のまま。<code>recharge_threshold</code> を0.9に上げ、<code>ambient_system.power</code> を100倍にしても結果は同じで、報告残量が動かない以上RMFは「下回る見込み」と判断できず、判断できなければ充電も挟まない。アダプタのログにも <code>The current battery percentage is 100.0% ... charging at an average rate of 0.0 %/hour</code> と出る。</p>
+<p>実機ではキューブの <code>battery_state</code> が実際に放電するので、残量が20%以下に落ちるとChargeBatteryが発火する(<a href="https://github.com/atinfinity/toio_rmf_bringup/issues/50">toio_rmf_bringup#50</a>)。手順は<a href="../14_real_battery_charge/">章14</a>と<a href="https://github.com/atinfinity/toio_rmf_bringup/issues/35">issue #35</a>にある。</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p><strong>simでもChargeBatteryを見たいときは、toio_gazeboのオプトインのsimバッテリを有効にする</strong>(<code>publish_battery:=true</code>)。走行でSoC(State of Charge、残量)が減り、自機チャージャーで充電されるので、「残量低下 → ChargeBattery → チャージャーへ帰還 → 充電 → 復帰」を通しで観察できる。デモを短時間で見たいときは <code>battery_discharge_rate</code> を上げる:</p>
+<div class="highlight"><pre><span></span><code>ros2<span class="w"> </span>launch<span class="w"> </span>toio_rmf_bringup<span class="w"> </span>toio_rmf.launch.py<span class="w"> </span>mat:<span class="o">=</span>a3<span class="w"> </span>run_sim:<span class="o">=</span><span class="nb">true</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>use_sim_time:<span class="o">=</span><span class="nb">true</span><span class="w"> </span>publish_battery:<span class="o">=</span><span class="nb">true</span><span class="w"> </span>battery_discharge_rate:<span class="o">=</span><span class="m">0</span>.02<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>battery_quantize_steps:<span class="o">=</span><span class="m">0</span>
+</code></pre></div>
+<p>報告される残量は既定で10%刻み(実機のキューブに合わせている)。下のGIFのように滑らかなバーで見たいときは <code>battery_quantize_steps:=0</code> を付ける。仕組みと引数は<a href="https://github.com/atinfinity/toio_gazebo/blob/main/docs/topics.md#battery-and-open-rmf-chargebattery">toio_gazeboの「Battery and Open-RMF ChargeBattery」</a>。</p>
+</div>
+<p><img alt="sim ChargeBattery(左: RViz2 / 右: Gazebo、左下に toio1 の残量)" src="../images/07_battery_charge.gif" />
+<em><code>publish_battery:=true</code>(放電を速めた例)。patrol中に <code>battery_percent</code>(左下のバー)が減る。低下するとチャージャーへ帰り、CHARGINGで100%まで回復してからタスクに戻る。simで再現した充電まわりの一連。既定はOFFなので、付けなければ残量は100%固定のまま。</em></p>
+<h3 id="3-finishing_request">3. 完了後の自動帰還を見る(finishing_request)</h3>
+<p>短いpatrolでも、完了後にチャージャーへ帰るのは <code>finishing_request: "charge"</code> の働き。章4で見た「勝手に帰る」挙動の正体がこれ。ChargeBatteryの「途中で帰る」と、finishing_requestの「終わったら帰る」は別トリガだが、どちらも「充電待機へ戻す」点で連続している。</p>
+<h2 id="_4">キャンセルと帰還</h2>
+<p>実行中のタスクは途中で取り消せる。取り消したロボットは <code>finishing_request</code> に従ってチャージャーへ戻る:</p>
+<div class="highlight"><pre><span></span><code>ros2<span class="w"> </span>run<span class="w"> </span>rmf_demos_tasks<span class="w"> </span>cancel_task<span class="w"> </span>-id<span class="w"> </span>&lt;task_id&gt;
+</code></pre></div>
+<ul>
+<li><code>task_id</code> は投入時のCLI出力、または <code>rmf_task_dispatcher</code> のログに出る</li>
+<li><strong><code>cancel_task</code> は <code>--use_sim_time</code> を受け付けない</strong>(<code>-id</code> のみ)。このチュートリアルで唯一 <code>--use_sim_time</code> を付けないコマンド。</li>
+<li><code>cancel_task</code> は実行後プロンプトに戻らず、止まったように見える。これは <code>rmf_demos_tasks</code> の仕様で、キャンセル要求をpublishした後にそのまま待受へ入るため。キャンセル自体は送信済みなので、<code>Ctrl-C</code> で抜けてよい。抜けたあとロボットがチャージャーへ戻れば成功。(詰まったら<a href="../TROUBLESHOOTING/">TROUBLESHOOTING.md</a>も参照)</li>
+</ul>
+<p>試すなら、長いpatrolを投げて途中で <code>cancel_task -id &lt;task_id&gt;</code> し、ロボットが巡回をやめてチャージャーへ帰るのを確認する。</p>
+<h2 id="_5">理解する</h2>
+<ul>
+<li><strong>バッテリ管理はフリートの自律性の要</strong>。入札で「誰が」、交通調停で「どう道を分けるか」を見てきたが、ChargeBatteryはいつ休むかを自分で決める層。この3つが揃うと、運用者は個々のロボットの世話をしなくてよくなる。</li>
+<li>見積もりにバッテリが入るので、章5の入札と繋がっている。残量の少ないロボットは「やったら足りなくなる」と見積もられ、入札で不利になったり、受注前に充電を挟んだりする。入札・充電・タスク実行は独立でなく連動している。</li>
+<li>finishing_requestとChargeBatteryは別物。前者は「タスク完了後の片付けポリシー」、後者は「実行中に残量が危ういときの割り込み」。混同しやすいが、トリガが違う。</li>
+</ul>
+<h2 id="_6">確認課題</h2>
+<ol>
+<li><code>/fleet_states</code> の <code>battery_percent</code> をechoし、長いpatrol中も100%から動かないことを確認する(simの制約。上のImportantの囲みの裏取り)。「なぜsimではChargeBatteryが発火しないか」を自分の言葉で説明できるか。</li>
+<li>patrol完了後、ロボットが <code>finishing_request: "charge"</code> で自機のチャージャーへ帰るのを確認する(これはsimでも動く充電まわりの挙動)。<code>finishing_request</code> を <code>nothing</code> に変えて起動し直すと帰らなくなることも試す。確認後は <code>charge</code> に戻すこと ── <code>nothing</code> のままだと、以降の章の「完了後に帰還する」前提が崩れる。</li>
+<li>実行中タスクを <code>cancel_task</code> で取り消し、ロボットがチャージャーへ戻ることを確認する。キャンセルとfinishing_requestの関係を説明できるか。</li>
+</ol>
+<p>自己管理まで見たら、次は「移動」以外のタスク ── 荷役(delivery)へ。ロボットだけでなくワークセルという別の登場人物が出てくる。</p>
+<p>← <a href="../06_traffic/">前章: 交通調停</a> | <a href="../">目次</a> | 次章: <a href="../08_delivery/">搬送とワークセル →</a></p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  ページトップへ戻る
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.top", "content.code.copy"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u30b3\u30d4\u30fc\u3057\u307e\u3057\u305f", "clipboard.copy": "\u30af\u30ea\u30c3\u30d7\u30dc\u30fc\u30c9\u3078\u30b3\u30d4\u30fc", "search.result.more.one": "\u3053\u306e\u30da\u30fc\u30b8\u5185\u306b\u3082\u30461\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.more.other": "\u3053\u306e\u30da\u30fc\u30b8\u5185\u306b\u3042\u3068#\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.none": "\u4f55\u3082\u898b\u3064\u304b\u308a\u307e\u305b\u3093\u3067\u3057\u305f", "search.result.one": "1\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.other": "#\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.placeholder": "\u691c\u7d22\u30ad\u30fc\u30ef\u30fc\u30c9\u3092\u5165\u529b\u3057\u3066\u304f\u3060\u3055\u3044", "search.result.term.missing": "\u691c\u7d22\u306b\u542b\u307e\u308c\u306a\u3044", "select.version": "\u30d0\u30fc\u30b8\u30e7\u30f3\u5207\u308a\u66ff\u3048"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>

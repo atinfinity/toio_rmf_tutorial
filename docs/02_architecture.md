@@ -26,7 +26,7 @@ flowchart TB
 
 - **① RMFコア**は、ロボットの機種を知らない。「patrol_Aへ行け」「この時刻にこのレーンを予約する」といった抽象的な指示だけを扱う。
 - **③ ロボット層**は、RMFを知らない。`NavigateToPose` アクションで「この座標へ行け」と言われたら走る、ただのNav2ロボット。
-- **② フリートアダプタ**が両者の通訳。RMFの抽象タスクを受け、Nav2の `NavigateToPose` に翻訳し、逆にロボットの位置・バッテリをRMFへ報告する。toioでは `toio_fleet_adapter`(RMFの EasyFullControl API 実装)がこれ。
+- **② フリートアダプタ**が両者の通訳。RMFの抽象タスクを受け、Nav2の `NavigateToPose` に翻訳し、逆にロボットの位置・バッテリをRMFへ報告する。toioでは `toio_fleet_adapter`(RMFのEasyFullControl API実装)がこれ。
 
 この分業のおかげで、下のロボットがシミュレーションでも実機でも、RMFコアの上で学ぶこと(入札・調停・充電)は同じになる。第2部で実機に移っても、差し替わるのは③だけ。
 
@@ -46,7 +46,7 @@ ros2 node list
 |---|---|
 | ① RMFコア | `rmf_task_dispatcher`、`rmf_traffic_schedule_primary`、`rmf_traffic_blockade`、`building_map_server`、可視化ノード群 |
 | ② アダプタ | `toio_fleet_adapter`(フリート名 `toio`) |
-| ③ ロボット | `/toio1/*`、`/toio2/*`(Nav2のcontroller / planner / bt_navigator など、名前空間付きで各1式) |
+| ③ ロボット | `/toio1/*`、`/toio2/*`(Nav2のcontroller / planner / bt_navigatorなど、名前空間付きで各1式) |
 
 名前空間 `/toio1` `/toio2` が付いているものがロボット1台ぶんのNav2。2台なので2セットある。名前空間の無いRMF・アダプタ系はフリート全体で1つ。
 
@@ -76,7 +76,7 @@ ros2 topic echo /fleet_states --once
 - ①と②の境界が、このチュートリアルの主戦場。**入札(章5)・交通調停(章6)・充電計画(章7)は①で決まり、②がそれをロボットの言葉に翻訳する**。
 - 位置とバッテリの報告経路は覚えておくと第2部(実機編)で効く。走行指令は②→③(`NavigateToPose`)へ下るが、位置・バッテリは③→②へ別経路で上がる。シミュレーションではTF(`map`→ベースフレーム)から、実機では `toio_ros2` の専用トピックから受け取る(→[章12](12_real_go_to_place.md))。
 
-より詳しい構成図(どのノードがlaunchされるか)は[README のパッケージ構成図](https://github.com/atinfinity/toio_rmf_bringup/blob/main/README.md)にある。
+より詳しい構成図(どのノードがlaunchされるか)は[READMEのパッケージ構成図](https://github.com/atinfinity/toio_rmf_bringup/blob/main/README.md)にある。
 
 ## 確認課題
 

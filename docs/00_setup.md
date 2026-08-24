@@ -13,7 +13,7 @@
 
 ### 1. ワークスペースを構築する
 
-環境構築はスクリプトで自動化されている。詳細な内訳とハマりどころは[docs/SETUP.md](https://github.com/atinfinity/toio_rmf_bringup/blob/main/docs/SETUP.md) にあるので、ここでは最短経路だけ示す。
+環境構築はスクリプトで自動化されている。詳細な内訳とハマりどころは[docs/SETUP.md](https://github.com/atinfinity/toio_rmf_bringup/blob/main/docs/SETUP.md)にあるので、ここでは最短経路だけ示す。
 
 ```bash
 gh repo clone atinfinity/toio_rmf_bringup /tmp/toio_rmf_bringup
@@ -26,7 +26,7 @@ bash /tmp/toio_rmf_bringup/scripts/setup_environment.sh   # シミュレーシ�
 
 ### 2. RVizの可視化パッチ(推奨)
 
-RMFの可視化ノードはマーカー寸法に0.1mの下限があり、そのままではtoioの小さなマット(A4で0.30×0.20m)で表示が破綻する。走行など機能面には影響しない。ただしこのチュートリアルはRVizで内部状態を観察するので、当てておくと後がラク。手順は[docs/SETUP.md の「rmf_visualization パッチ」](https://github.com/atinfinity/toio_rmf_bringup/blob/main/docs/SETUP.md)を参照。
+RMFの可視化ノードはマーカー寸法に0.1mの下限があり、そのままではtoioの小さなマット(A4で0.30×0.20m)で表示が破綻する。走行など機能面には影響しない。ただしこのチュートリアルはRVizで内部状態を観察するので、当てておくと後がラク。手順は[docs/SETUP.mdの「rmf_visualizationパッチ」](https://github.com/atinfinity/toio_rmf_bringup/blob/main/docs/SETUP.md)を参照。
 
 ### 3. スモークテスト(2端末)
 
@@ -53,7 +53,7 @@ ros2 run rmf_demos_tasks dispatch_patrol -p patrol_A patrol_D -n 2 --use_sim_tim
 起動直後の様子(左: Gazebo、右: RViz)。A3マット上に2台のキューブが乗り、RVizには同じマットのnavグラフ(頂点とレーン)と2台の位置が描かれる。
 
 ![toio_gazebo: A3マット上の2台のキューブ](images/00_setup_gazebo.png)
-*Gazebo ── A3マット(グレー)の上に `toio1` / `toio2` の2台。緑の線は Gazebo が光源(各ロボットのLEDランプなど)の位置を示す表示で、センサーではない(toioにレーザースキャンはない)。*
+*Gazebo ── A3マット(グレー)の上に `toio1` / `toio2` の2台。緑の線はGazeboが光源(各ロボットのLEDランプなど)の位置を示す表示で、センサーではない(toioにレーザースキャンはない)。*
 
 ![RViz: A3マットのnavグラフと2台](images/00_setup_rviz.png)
 *RViz(真上視点) ── 6頂点(`charger_1/2`・`patrol_A/B/C/D`)と全レーンの格子が描かれ、2台のロボット(マゼンタの球)がそれぞれのチャージャー上にいる。*
@@ -75,7 +75,7 @@ ros2 run rmf_demos_tasks dispatch_patrol -p patrol_A patrol_D -n 2 --use_sim_tim
 | `run_sim` | `true` | toio_gazeboシミュレーションも起動する |
 | `use_sim_time` | `true` | シミュレーション時刻(`/clock`)を使う |
 
-`run_sim` と `use_sim_time` の両方を `true` にするのがシミュレーションの合図。片方だけだと時刻がずれてタスクが進まない。全引数は[README の「主な引数」](https://github.com/atinfinity/toio_rmf_bringup/blob/main/README.md)にある。
+`run_sim` と `use_sim_time` の両方を `true` にするのがシミュレーションの合図。片方だけだと時刻がずれてタスクが進まない。全引数は[READMEの「主な引数」](https://github.com/atinfinity/toio_rmf_bringup/blob/main/README.md)にある。
 
 ## 確認課題
 
@@ -83,6 +83,6 @@ ros2 run rmf_demos_tasks dispatch_patrol -p patrol_A patrol_D -n 2 --use_sim_tim
 2. スモークテストのpatrolが完走し、2台とも自分のチャージャーに戻ったか。戻らない場合は端末Aのログにエラーが出ていないか確認する。
 
 > [!TIP]
-> `/fleet_states` にロボットが出てこない・入札で `no bids` になる・2回目の起動から動かなくなった、などコマンドは正しいのに引っかかるときは[TROUBLESHOOTING.md](TROUBLESHOOTING.md) を参照。多くは前回起動のプロセス残存と共有メモリの掃除で直る。
+> `/fleet_states` にロボットが出てこない・入札で `no bids` になる・2回目の起動から動かなくなった、などコマンドは正しいのに引っかかるときは[TROUBLESHOOTING.md](TROUBLESHOOTING.md)を参照。多くは前回起動のプロセス残存と共有メモリの掃除で直る。
 
 ← [目次](index.md) | 次章: [Open-RMFとは(概要と用語) →](01_overview.md)

@@ -4,7 +4,7 @@
 
 ## 卒業課題 ── 実機検証チェックリスト
 
-[docs/SETUP.md の「検証項目」](https://github.com/atinfinity/toio_rmf_bringup/blob/main/docs/SETUP.md)が、そのまま卒業課題になる。第1部(sim)・第2部(実機)の各章と対応づけて挑むと、学んだことの答え合わせになる:
+[docs/SETUP.mdの「検証項目」](https://github.com/atinfinity/toio_rmf_bringup/blob/main/docs/SETUP.md)が、そのまま卒業課題になる。第1部(sim)・第2部(実機)の各章と対応づけて挑むと、学んだことの答え合わせになる:
 
 | 項目 | 学んだ章(sim → 実機) |
 |---|---|
@@ -16,7 +16,7 @@
 | [ ] バッテリ離散値(10%刻み)の実測確認 | [章7](07_battery_charge.md) → [章14](14_real_battery_charge.md) |
 | [ ] 低バッテリ時のChargeBattery発行・チャージャー帰還(Dock停止) | [章7](07_battery_charge.md) → [章14](14_real_battery_charge.md) |
 | [ ] タスクキャンセル → 再投入 | [章7](07_battery_charge.md) → [章14](14_real_battery_charge.md) |
-| [ ] delivery と perform_action(LED・効果音) | [章8](08_delivery.md)・[章9](09_fleet_action.md) → [章15](15_real_delivery_action_viz.md) |
+| [ ] deliveryとperform_action(LED・効果音) | [章8](08_delivery.md)・[章9](09_fleet_action.md) → [章15](15_real_delivery_action_viz.md) |
 | [ ] BLE切断 → 位置報告停止 → 再接続後の復帰 | ── → [章16](16_real_troubles.md) |
 | [ ] マット境界付近の挙動(Position ID読取不能領域に入らない) | ── → [章16](16_real_troubles.md) |
 
@@ -44,13 +44,13 @@
 
 **入札・交通調停・充電**の3つが、Open-RMFのフリート処理の核。この3つが揃うと、運用者は個々のロボットの世話をせずにフリートを回せる。このチュートリアルでは、その3つを手のひらサイズのtoioで通しで体験した ── シミュレーションで仕組みを、実機で手触りを。
 
-第2部で一貫して見たのは、ロボット層③を差し替えても①②は一切変わらないこと。コマンドもログも同じで、変わったのは位置・バッテリ・LED・音の「出どころと行き先」だけだった。これが Open-RMF がフリートアダプタという境界を置いている理由そのもの。
+第2部で一貫して見たのは、ロボット層③を差し替えても①②は一切変わらないこと。コマンドもログも同じで、変わったのは位置・バッテリ・LED・音の「出どころと行き先」だけだった。これがOpen-RMFがフリートアダプタという境界を置いている理由そのもの。
 
 ## 次に進むなら
 
 - 別のフリート(toio以外のロボット)を同じRMFコアに繋ぐ ── フリートアダプタ(EasyFullControl)を自分で書く
-- navグラフを自作する ── `toio_rmf_maps` の建物図・navグラフ定義を読む。A4で見た mutex group や Dock の設定がどう書かれているかから入るとよい
-- door / lift など、このパッケージが省いたRMF機能(rmf_demos参照)
-- 実機編の画像・動画を、実機で撮ったものに差し替える([CAPTURE.md](CAPTURE.md) に実機撮影の手順を足すところから)
+- navグラフを自作する ── `toio_rmf_maps` の建物図・navグラフ定義を読む。A4で見たmutex groupやDockの設定がどう書かれているかから入るとよい
+- door / liftなど、このパッケージが省いたRMF機能(rmf_demos参照)
+- 実機編の画像・動画を、実機で撮ったものに差し替える([CAPTURE.md](CAPTURE.md)に実機撮影の手順を足すところから)
 
 ← [前章: 実機特有のトラブルと復帰](16_real_troubles.md) | [目次](index.md)

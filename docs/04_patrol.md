@@ -4,13 +4,13 @@
 
 ## 狙い
 
-- 複数地点を周回する **patrol** タスクを投げる
+- 複数地点を周回する**patrol** タスクを投げる
 - タスクで指定する `patrol_A` などが何なのか ── navグラフ(頂点とレーン)を理解する。ここはフリート処理の「地図」であり、章6の交通調停の舞台になる。
 - タスク完了後に勝手にチャージャーへ帰る仕組み(`finishing_request`)を知る
 
 ## navグラフとは
 
-RMFのロボットは自由空間を好きに動くのではなく、あらかじめ引かれた頂点(waypoint)とレーン(lane)の上を動く。この地図が **navグラフ**。タスクで指定する `patrol_A` はこの頂点名で、マットごとに定義が違う。
+RMFのロボットは自由空間を好きに動くのではなく、あらかじめ引かれた頂点(waypoint)とレーン(lane)の上を動く。この地図が**navグラフ**。タスクで指定する `patrol_A` はこの頂点名で、マットごとに定義が違う。
 
 ### A3マット(このチュートリアルの既定)
 
@@ -19,7 +19,7 @@ RMFのロボットは自由空間を好きに動くのではなく、あらか�
 ![A3マットのnavグラフ](images/navgraph_a3.svg)
 *6頂点(`patrol_A`〜`patrol_D` と、両端の充電地点 `charger_1`=toio1 / `charger_2`=toio2)を双方向レーンで結んだ格子。タスクで指定する `patrol_A` などはこの頂点名。*
 
-- `patrol_A–patrol_B–patrol_D` と `patrol_A–patrol_C–patrol_D` はどちらも 0.31mで等長。この事実は[章6](06_traffic.md)の交通調停で効いてくる ── 等長ゆえに、同じ2地点でも通るレーンが変わりうる。
+- `patrol_A–patrol_B–patrol_D` と `patrol_A–patrol_C–patrol_D` はどちらも0.31mで等長。この事実は[章6](06_traffic.md)の交通調停で効いてくる ── 等長ゆえに、同じ2地点でも通るレーンが変わりうる。
 
 > A4マットは形も向きも違う(一方通行ループ)。狭さゆえの設計で、[章6](06_traffic.md)と、実機編の[章12](12_real_go_to_place.md)で扱う。
 
@@ -48,10 +48,10 @@ ros2 run rmf_demos_tasks dispatch_patrol -p patrol_A patrol_B patrol_D patrol_C 
 patrol実行中のRViz。緑の帯が `rmf_traffic_schedule` に予約された走行経路(スケジュール)で、稼働中のロボットにだけ出る。navグラフと床面図はそのまま残る。
 
 ![patrol実行中のRViz: スケジュール経路帯](images/04_patrol_rviz.png)
-*緑の帯が予約された経路。toio1が巡回中、toio2は `charger_2` で待機。(スケジュールのfootprint/vicinity 円は既定で非表示 ── [章10](10_visualization.md)参照)*
+*緑の帯が予約された経路。toio1が巡回中、toio2は `charger_2` で待機。(スケジュールのfootprint/vicinity円は既定で非表示 ── [章10](10_visualization.md)参照)*
 
 ![patrol走行のアニメーション(左: RViz2 / 右: Gazebo)](images/04_patrol.gif)
-*同じ patrol 走行を2つのビューで並べたもの。左が RViz2(RMFスケジュール可視化 ── navグラフ・ロボット・予約経路)、右が toio_gazebo(マット上の実際のキューブの動き)。toio1が巡回先を順に訪問していく。*
+*同じpatrol走行を2つのビューで並べたもの。左がRViz2(RMFスケジュール可視化 ── navグラフ・ロボット・予約経路)、右がtoio_gazebo(マット上の実際のキューブの動き)。toio1が巡回先を順に訪問していく。*
 
 ### 1. 周回と帰還を目で追う
 
@@ -68,9 +68,9 @@ patrol実行中のRViz。緑の帯が `rmf_traffic_schedule` に予約された�
 
 ## 理解する
 
-patrol は go_to_place(章3)の移動フェーズを、指定地点ぶん・指定周回ぶん並べたもの。navグラフはフリート全体で共有される地図なので、2台とも同じ頂点・レーンを使い、同じレーンを取り合う状況が起きる ── その調停は章6で扱う。
+patrolはgo_to_place(章3)の移動フェーズを、指定地点ぶん・指定周回ぶん並べたもの。navグラフはフリート全体で共有される地図なので、2台とも同じ頂点・レーンを使い、同じレーンを取り合う状況が起きる ── その調停は章6で扱う。
 
-`finishing_request` は、タスクが終わったロボットをどうするか(charge / park / nothing)を決めるフリートの「片付け」ポリシーで、toio は `charge`(チャージャーへ帰す)。この帰還も1つのタスクとして navグラフ上を走るので、帰り道でも交通調停は効く。定義はフリート設定 `toio_fleet_config_<mat>.yaml` にあり、章7・章9で編集する。
+`finishing_request` は、タスクが終わったロボットをどうするか(charge / park / nothing)を決めるフリートの「片付け」ポリシーで、toioは `charge`(チャージャーへ帰す)。この帰還も1つのタスクとしてnavグラフ上を走るので、帰り道でも交通調停は効く。定義はフリート設定 `toio_fleet_config_<mat>.yaml` にあり、章7・章9で編集する。
 
 ## 確認課題
 

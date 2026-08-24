@@ -21,7 +21,7 @@ source ~/dev_ws/install/setup.bash
 ros2 launch toio_rmf_bringup toio_rmf.launch.py mat:=a3 run_sim:=true use_sim_time:=true
 ```
 
-RVizの表示がマット向けに正しく出るには **`rmf_visualization` の small-mapsパッチ**が必要(未適用だと footprint/vicinity の巨大な円柱がnavグラフを覆う)。手順は [docs/SETUP.md](https://github.com/atinfinity/toio_rmf_bringup/blob/main/docs/SETUP.md) の「rmf_visualization パッチ」を参照。
+RVizの表示がマット向けに正しく出るには**`rmf_visualization` のsmall-mapsパッチ**が必要(未適用だとfootprint/vicinityの巨大な円柱がnavグラフを覆う)。手順は[docs/SETUP.md](https://github.com/atinfinity/toio_rmf_bringup/blob/main/docs/SETUP.md)の「rmf_visualizationパッチ」を参照。
 
 ## ウィンドウ単位のスクリーンショット
 
@@ -37,7 +37,7 @@ import -window $WID images/00_setup_rviz.png
 
 ## 画面録画 → GIF
 
-`ffmpeg` の x11grab で対象ウィンドウの矩形を録画する。**幅・高さは偶数**にすること(libx264 は奇数サイズを拒否する。RViz既定 1853x1025 → `1852x1024`)。
+`ffmpeg` のx11grabで対象ウィンドウの矩形を録画する。**幅・高さは偶数**にすること(libx264は奇数サイズを拒否する。RViz既定1853x1025 → `1852x1024`)。
 
 ```bash
 # 位置とサイズ: xdotool getwindowgeometry <WID> で確認
@@ -53,21 +53,21 @@ ffmpeg -y -i /tmp/clip.mp4 -i /tmp/pal.png \
 
 ## 合成GIF(左RViz / 右Gazebo)
 
-`04_patrol.gif` / `06_traffic.gif` は **RViz と Gazebo を左右に並べた合成GIF**。「スケジュール(RViz)」と「実際のキューブの動き(Gazebo)」を同時に見せるため。**同一走行から RViz と Gazebo の両ウィンドウを毎フレーム同時にグラブ**するので、左右のパネルはフレーム単位で同期する。`ffmpeg` が使えない環境向けに、Pythonだけで撮影・合成する手順も用意した。
+`04_patrol.gif` / `06_traffic.gif` は**RVizとGazeboを左右に並べた合成GIF**。「スケジュール(RViz)」と「実際のキューブの動き(Gazebo)」を同時に見せるため。**同一走行からRVizとGazeboの両ウィンドウを毎フレーム同時にグラブ**するので、左右のパネルはフレーム単位で同期する。`ffmpeg` が使えない環境向けに、Pythonだけで撮影・合成する手順も用意した。
 
 ```bash
 pip install --user mss imageio python-xlib   # 画面グラブ / GIF / ウィンドウ操作
 ```
 
-前提: RViz をマットスケールで綺麗に写すため、**`rmf_visualization` の small-mapsパッチ**を適用しておく([docs/SETUP.md](https://github.com/atinfinity/toio_rmf_bringup/blob/main/docs/SETUP.md))。未適用だと footprint/vicinity の巨大マーカーがnavグラフを覆う。
+前提: RVizをマットスケールで綺麗に写すため、**`rmf_visualization` のsmall-mapsパッチ**を適用しておく([docs/SETUP.md](https://github.com/atinfinity/toio_rmf_bringup/blob/main/docs/SETUP.md))。未適用だとfootprint/vicinityの巨大マーカーがnavグラフを覆う。
 
-1. sim を GUI 付きで起動(`toio_rmf.launch.py` を `rmf_headless` を付けずに実行 →Gazebo GUI と RMF可視化 RViz が両方 `:1` に出る)。実GPU付きの X(`:1`)ならヘッドレス寄りの環境でも GUI は描画される。
+1. simをGUI付きで起動(`toio_rmf.launch.py` を `rmf_headless` を付けずに実行 →Gazebo GUIとRMF可視化RVizが両方 `:1` に出る)。実GPU付きのX(`:1`)ならヘッドレス寄りの環境でもGUIは描画される。
 2. **2つのウィンドウを重ならないように左右へ配置**(`python-xlib` の `_NET_MOVERESIZE_WINDOW` / `_NET_ACTIVE_WINDOW`)。
-3. タスクを投入し、走り出すまで数秒(交通調停なら約5秒)待ってから録画を始める。**毎フレーム RViz と Gazebo の両矩形を `mss` でグラブ**し、描画部分を crop して連番PNGのペアで保存する(10fps × 180フレーム=18秒)。`traffic` は片道で終わると後半が静止するので、2台を **逆向きに周回**(例: `patrol_B patrol_C` と `patrol_C patrol_B`)させて全編クロスし続ける画にする。
-4. RViz を左、Gazebo を右に置いて横並び合成し、ラベル(`RViz2` / `Gazebo`)を焼き込む(Pillow)。両パネルは同じフレーム番号=同時刻なので同期する。
-5. **GIF軽量化のコツ**: 静止部の微小レンダノイズで色indexがブレるとフレーム間圧縮が効かず数MBに膨れる。`ImageOps.posterize(5)` でノイズを丸め、共有パレット・**ディザ無効**・**`disposal=1`**(前フレームに差分だけ上書き)で保存すると、180フレームでも 1〜2MB に収まる。
+3. タスクを投入し、走り出すまで数秒(交通調停なら約5秒)待ってから録画を始める。**毎フレームRVizとGazeboの両矩形を `mss` でグラブ**し、描画部分をcropして連番PNGのペアで保存する(10fps × 180フレーム=18秒)。`traffic` は片道で終わると後半が静止するので、2台を**逆向きに周回**(例: `patrol_B patrol_C` と `patrol_C patrol_B`)させて全編クロスし続ける画にする。
+4. RVizを左、Gazeboを右に置いて横並び合成し、ラベル(`RViz2` / `Gazebo`)を焼き込む(Pillow)。両パネルは同じフレーム番号=同時刻なので同期する。
+5. **GIF軽量化のコツ**: 静止部の微小レンダノイズで色indexがブレるとフレーム間圧縮が効かず数MBに膨れる。`ImageOps.posterize(5)` でノイズを丸め、共有パレット・**ディザ無効**・**`disposal=1`**(前フレームに差分だけ上書き)で保存すると、180フレームでも1〜2MBに収まる。
 
-## RViz のカメラ(フィット/センタリング)
+## RVizのカメラ(フィット/センタリング)
 
 `rviz/toio_rmf.rviz` の `Views > Current`(TopDownOrtho)で決まる:
 
@@ -80,7 +80,7 @@ A4マットで撮るときは `Scale` を上げ気味に、`X`/`Y` をA4の中�
 
 ## 既知の注意点
 
-- **タスク開始直後にnavグラフ/床面図が一度消えることがある**。navgraph visualizer が起動直後に DELETEALL を送り、RVizがそれを受けてクリアするため(publisher側のlatchデータは生きている)。**撮影前にRVizを一度リロードしておくと**、再購読でnavグラフが復活し、以後はタスク中も残って安定する。
+- **タスク開始直後にnavグラフ/床面図が一度消えることがある**。navgraph visualizerが起動直後にDELETEALLを送り、RVizがそれを受けてクリアするため(publisher側のlatchデータは生きている)。**撮影前にRVizを一度リロードしておくと**、再購読でnavグラフが復活し、以後はタスク中も残って安定する。
 - Gazeboウィンドウはマップを見失わないので、「実行中の様子」を確実に撮るにはGazebo側が手堅い。
 
 ## 各メディアの撮り方(対応表)
@@ -95,14 +95,14 @@ A4マットで撮るときは `Scale` を上げ気味に、`X`/`Y` をA4の中�
 | `05_bidding_log.png` | 端末風PNG | `dispatch_patrol` の `-R`有/無 の実出力を並べて描画(`scripts`外の生成物) |
 | `06_traffic_rviz.png` | RViz | 2台に別タスクを投入、経路帯が交錯した瞬間 |
 | `06_traffic.gif` | RViz+Gazebo(合成) | 2台の交差を左RViz/右Gazeboで並べた合成GIF(上記「合成GIF」参照) |
-| `07_battery_charge.gif` | RViz+Gazebo(合成) | `publish_battery:=true`(放電を速めた例)で patrol → 残量低下 → チャージャーで充電 → 復帰。左RViz/右Gazebo を同時グラブし、左下に toio1 の残量バー(`/fleet_states` の `battery_percent`)を焼き込む(上記「合成GIF」参照) |
+| `07_battery_charge.gif` | RViz+Gazebo(合成) | `publish_battery:=true`(放電を速めた例)でpatrol → 残量低下 → チャージャーで充電 → 復帰。左RViz/右Gazeboを同時グラブし、左下にtoio1の残量バー(`/fleet_states` の `battery_percent`)を焼き込む(上記「合成GIF」参照) |
 | `08_delivery.gif` | RViz+Gazebo(合成) | deliveryを投入し、pickup→dropoffの移動と各地点の保持を左RViz/右Gazeboで同時グラブ(上記「合成GIF」参照) |
 | `09_fleet_action.gif` | RViz+Gazebo(合成) | `dispatch_action` を複数投入し、pickup(緑)/dropoff(青)のLED点灯と移動を左RViz/右Gazeboで同時グラブ(上記「合成GIF」参照) |
 | `10_footprint_vicinity.png` | RViz | `ScheduleMarkers` の `participant location 0/1` を表示に切り替え、稼働中の円が出た状態 |
 | `10_dashboard_robots.png` | ブラウザ | rmf-webのRobotsタブ。別途コンテナ起動が要る([docs/DASHBOARD.md](https://github.com/atinfinity/toio_rmf_bringup/blob/main/docs/DASHBOARD.md)) |
 
-> `07_battery_charge.gif` は残量バーを焼き込むため、フレームごとに `/fleet_states` の `battery_percent` を記録しながら両ウィンドウをグラブし、合成時にバー(緑/黄/赤 + `CHARGING` 表示)を描く。放電が速すぎると 0% まで落ちてから充電に入るので、`battery_discharge_rate` は 0% に達する前に帰還・充電が見える程度(例 0.03)に抑える。残量の既定は 10% 刻みなので、滑らかなバーにするには `battery_quantize_steps:=0` を付ける。
+> `07_battery_charge.gif` は残量バーを焼き込むため、フレームごとに `/fleet_states` の `battery_percent` を記録しながら両ウィンドウをグラブし、合成時にバー(緑/黄/赤 + `CHARGING` 表示)を描く。放電が速すぎると0%まで落ちてから充電に入るので、`battery_discharge_rate` は0%に達する前に帰還・充電が見える程度(例0.03)に抑える。残量の既定は10%刻みなので、滑らかなバーにするには `battery_quantize_steps:=0` を付ける。
 
 ## 図版(SVG)の原本
 
-`images/navgraph_a3.svg` / `navgraph_a4.svg` / `initial_placement_a4.svg` は撮影物ではなく手描きのSVGで、原本は[toio_rmf_bringup の docs/images/](https://github.com/atinfinity/toio_rmf_bringup/tree/main/docs/images)にある(bringup 側の README・SETUP.md・TASKS.md からも参照されるため)。変更するときは bringup 側を更新し、このリポジトリへコピーして同期する。
+`images/navgraph_a3.svg` / `navgraph_a4.svg` / `initial_placement_a4.svg` は撮影物ではなく手描きのSVGで、原本は[toio_rmf_bringupのdocs/images/](https://github.com/atinfinity/toio_rmf_bringup/tree/main/docs/images)にある(bringup側のREADME・SETUP.md・TASKS.mdからも参照されるため)。変更するときはbringup側を更新し、このリポジトリへコピーして同期する。

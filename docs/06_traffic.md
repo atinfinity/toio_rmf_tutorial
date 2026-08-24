@@ -7,7 +7,7 @@
 - **フリート処理の核心その2** ── 2台が同じ道を使おうとしたとき、衝突せずに捌く仕組みを観察する
 - RMFの交通調停が二層でできていることを理解する:
   - **大域**: `rmf_traffic_schedule` が経路を予約し、先に予約した側を通す
-  - **局所**: Nav2の peer costmap が相手を障害物として避ける
+  - **局所**: Nav2のpeer costmapが相手を障害物として避ける
 - 狭いA4マットの一方通行設計が、なぜそうなっているかを知る
 
 ## 二層の交通調停
@@ -47,7 +47,7 @@ ros2 run rmf_demos_tasks dispatch_go_to_place -p charger_1 -F toio -R toio2 --us
 *2台に別々のタスクを投げた状態。2本の緑の経路帯(スケジュール予約)が格子を縫うように引かれ、競合区間で譲り合いが起きる。*
 
 ![2台の交差のアニメーション(左: RViz2 / 右: Gazebo)](images/06_traffic.gif)
-*2台が格子上を動きながらレーンを分け合う様子を2つのビューで並べたもの。左が RViz2(RMFスケジュール可視化 ── 2本の予約経路帯)、右が toio_gazebo(実際のキューブのすれ違い)。競合区間では手前で待つ/別レーンへ回り込む挙動が見える。*
+*2台が格子上を動きながらレーンを分け合う様子を2つのビューで並べたもの。左がRViz2(RMFスケジュール可視化 ── 2本の予約経路帯)、右がtoio_gazebo(実際のキューブのすれ違い)。競合区間では手前で待つ/別レーンへ回り込む挙動が見える。*
 
 ### 実験2: 待ちを `/fleet_states` で見る
 
@@ -68,7 +68,7 @@ ros2 launch toio_rmf_bringup toio_rmf.launch.py mat:=a4 run_sim:=true use_sim_ti
 ```
 
 ![A4マットのnavグラフ](images/navgraph_a4.svg)
-*A3の双方向格子と違い、`approach_1 → patrol_A → approach_2 → patrol_B → approach_1` の**時計回り一方通行ループ**。各チャージャーは approach から伸びる双方向の支線の先にぶら下がる。矢印がレーンの向き。*
+*A3の双方向格子と違い、`approach_1 → patrol_A → approach_2 → patrol_B → approach_1` の**時計回り一方通行ループ**。各チャージャーはapproachから伸びる双方向の支線の先にぶら下がる。矢印がレーンの向き。*
 
 A4の頂点は `patrol_A` / `patrol_B` / `approach_1` / `approach_2` + `charger_1` / `charger_2`(`patrol_C` / `patrol_D` は無い)。patrolを投げると:
 
@@ -78,14 +78,14 @@ ros2 run rmf_demos_tasks dispatch_patrol -p patrol_A patrol_B -n 2 --use_sim_tim
 
 **観察**: `patrol_B → patrol_A` へ戻るとき、逆走せずループを一周して戻る。一方通行なので遠回りに見えるが、これが正常。狭い場所で正面衝突を構造的に避けるための設計。
 
-> A4での2台同時運用は物理限界に近い。頂点付近で同時に入れ替わると角が接触しうる。確実な非接触が要るならA3を使う。詳細は[README の「A4での2台同時運用の注意」](https://github.com/atinfinity/toio_rmf_bringup/blob/main/README.md)を参照。
+> A4での2台同時運用は物理限界に近い。頂点付近で同時に入れ替わると角が接触しうる。確実な非接触が要るならA3を使う。詳細は[READMEの「A4での2台同時運用の注意」](https://github.com/atinfinity/toio_rmf_bringup/blob/main/README.md)を参照。
 
 ## 理解する
 
 - 交通調停 ≠ 入札。入札(章5)は「誰がやるか」の意思決定、交通調停は「走り出した後の道の分け合い」。この2つが揃って初めてマルチロボットが成立する。
 - 大域と局所は補い合う。大域だけだと現場の誤差でぶつかりうるし、局所だけだと膠着(お見合い)しやすい。RMFは大域で大枠の順番を決め、局所で最後の安全を取る。
 - navグラフの設計は交通調停の効きを左右する。A3の格子は逃げ道が多く調停がラク、A4の一方通行は逃げ道を捨てる代わりに正面衝突を封じる。**地図の作り方が渋滞の起きやすさを決める** ── フリート運用の実務的な勘所。
-- peer costmapのフットプリントを大きくしすぎると、狭いA4では通路を塞いでNav2がデッドロックする。だからマットごとに自動で加減している。詳細は[README の `peer_footprint_size`](https://github.com/atinfinity/toio_rmf_bringup/blob/main/README.md) を参照。
+- peer costmapのフットプリントを大きくしすぎると、狭いA4では通路を塞いでNav2がデッドロックする。だからマットごとに自動で加減している。詳細は[READMEの `peer_footprint_size`](https://github.com/atinfinity/toio_rmf_bringup/blob/main/README.md)を参照。
 
 ## 確認課題
 
